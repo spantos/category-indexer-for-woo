@@ -1,0 +1,16 @@
+.category-section-title {
+    color: #2271b1;
+}
+.category-section-title span {
+    color: #777;
+    font-size: 14px;
+}
+th {
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
+    vertical-align: middle !important;
+}
+td {
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
+}

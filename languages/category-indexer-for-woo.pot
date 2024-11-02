@@ -1,0 +1,150 @@
+# Copyright (C) 2024 
+# This file is distributed under the GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Category Indexer for WooCommerce 1 *\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/category-indexer-for-woo\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-11-01T19:29:08+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: category-indexer-for-woo\n"
+
+#. Plugin Name of the plugin
+#: includes/admin/class-wc-category-indexer-admin.php:195
+msgid "Category Indexer for WooCommerce"
+msgstr ""
+
+#. Description of the plugin
+msgid "Display and manage index options for WooCommerce categories and subcategories."
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:49
+#: includes/admin/class-wc-category-indexer-admin.php:50
+msgid "Category Indexer"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:169
+msgid "Plugin zahteva da se instalira i aktivira WooCommerce plugin"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:178
+msgid "This plugin requires Rank Math SEO or Yoast SEO to be installed and activated. Please install and activate one of these plugins before activating Category Indexer for WooCommerce."
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:202
+msgid "Shop Pages Settings"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:205
+#: includes/admin/class-wc-category-indexer-admin.php:395
+msgid "First Page"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:210
+#: includes/admin/class-wc-category-indexer-admin.php:234
+#: includes/admin/class-wc-category-indexer-admin.php:330
+#: includes/admin/class-wc-category-indexer-admin.php:400
+#: includes/admin/class-wc-category-indexer-admin.php:424
+msgid "Index"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:214
+#: includes/admin/class-wc-category-indexer-admin.php:238
+#: includes/admin/class-wc-category-indexer-admin.php:334
+#: includes/admin/class-wc-category-indexer-admin.php:404
+#: includes/admin/class-wc-category-indexer-admin.php:428
+msgid "No index"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:219
+#: includes/admin/class-wc-category-indexer-admin.php:243
+#: includes/admin/class-wc-category-indexer-admin.php:339
+#: includes/admin/class-wc-category-indexer-admin.php:409
+#: includes/admin/class-wc-category-indexer-admin.php:433
+msgid "Follow"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:223
+#: includes/admin/class-wc-category-indexer-admin.php:247
+#: includes/admin/class-wc-category-indexer-admin.php:343
+#: includes/admin/class-wc-category-indexer-admin.php:413
+#: includes/admin/class-wc-category-indexer-admin.php:437
+msgid "No follow"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:229
+#: includes/admin/class-wc-category-indexer-admin.php:419
+msgid "All Other Pages"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:256
+msgid "Canonical tag for pages after the first page"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:261
+msgid "Default (No Change)"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:265
+#: includes/admin/class-wc-category-indexer-admin.php:496
+msgid "First page as a canonical link"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:292
+msgid "WooCommerce Order By Filter Settings"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:295
+msgid "Filter \"Order By\" Settings"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:300
+msgid "Noindex"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:305
+msgid "Nofollow"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:322
+#: includes/admin/class-wc-category-indexer-admin.php:325
+msgid "URL with Parameters"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:372
+msgid "Category Archive Settings"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:379
+msgid " Pages"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:385
+msgid " - Subcategory of "
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:391
+msgid " - Category"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:447
+msgid "First Pge Canonical Tag"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:452
+#: includes/admin/class-wc-category-indexer-admin.php:492
+msgid "Default"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:456
+msgid "Custom"
+msgstr ""
+
+#: includes/admin/class-wc-category-indexer-admin.php:487
+msgid "All Other Pgeas Canonical Tag"
+msgstr ""
