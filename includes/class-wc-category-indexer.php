@@ -128,27 +128,28 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 				return $robots;
 			}
 
-			if ( is_shop() || is_product_category() ) {
-				$current_page = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+			if ( is_shop() ) {
+				$current_page = get_query_var( 'paged' ) ?? 1;
 				if ( is_shop() ) {
-					$shop_page_index_option    = ( get_option( 'wc_category_indexer_option_shop' ) );
+					$shop_page_index_option    = get_option( 'wc_category_indexer_option_shop' );
 					if ( $shop_page_index_option === false ) {
 						return $robots;
 					}
-					$first_page_index_option   = $shop_page_index_option['shop_first_page_index'];
-					$other_pages_index_option  = $shop_page_index_option['shop_all_other_page_index'];
-					$first_page_follow_option  = $shop_page_index_option['shop_first_page_follow'];
-					$other_pages_follow_option = $shop_page_index_option['shop_all_other_page_follow'];
-				} else {
+					$first_page_index_option   = $shop_page_index_option['shop_first_page_index'] ?? 'index';
+					$other_pages_index_option  = $shop_page_index_option['shop_all_other_page_index'] ?? 'index';
+					$first_page_follow_option  = $shop_page_index_option['shop_first_page_follow'] ?? 'follow';
+					$other_pages_follow_option = $shop_page_index_option['shop_all_other_page_follow'] ?? 'follow';
+				} 
+				if ( is_product_category() ) {
 					$term                       = get_queried_object();
 					$category_page_index_option = ( get_option( 'wc_category_indexer_category_options' ) );
 					if ( $category_page_index_option === false ) {
 						return $robots;
 					}
-					$first_page_index_option    = $category_page_index_option[ $term->term_id ]['first_page_index'];
-					$other_pages_index_option   = $category_page_index_option[ $term->term_id ]['all_other_pages_index'];
-					$first_page_follow_option   = $category_page_index_option[ $term->term_id ]['first_page_follow'];
-					$other_pages_follow_option  = $category_page_index_option[ $term->term_id ]['all_other_pages_follow'];
+					$first_page_index_option    = $category_page_index_option[ $term->term_id ]['first_page_index'] ?? 'index';
+					$other_pages_index_option   = $category_page_index_option[ $term->term_id ]['all_other_pages_index'] ?? 'index';
+					$first_page_follow_option   = $category_page_index_option[ $term->term_id ]['first_page_follow'] ?? 'follow';
+					$other_pages_follow_option  = $category_page_index_option[ $term->term_id ]['all_other_pages_follow'] ?? 'follow';
 				}
 
 				if ( $current_page === 1 ) {
@@ -167,6 +168,8 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 				}
 
 				$url_parameters_options = get_option( 'wc_category_indexer_option_url_parameters' );
+				if ( isset($url_parameters_options) ) {				
+				
 				if ( $this->has_url_parameters( $this->request_url ) ) {
 						$url_parameters_index = $url_parameters_options['index'] ?? false;
 						$url_parameters_follow = $url_parameters_options['follow'] ?? false;
@@ -178,6 +181,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 						$robots = ( $url_parameters_index ? $url_parameters_index : 'index' ) . ',' . ( $url_parameters_follow ? $url_parameters_follow : 'follow' );
 					}
 				}
+			}
 
 				// Override with WooCommerce order by filter settings if they are set
 				$orderby_filter_options = get_option( 'wc_category_indexer_option_orderby' );
@@ -190,12 +194,12 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 					}
 
 					if ( $this->rank_math_activated ) {
-						$robots['index']  = $meta_robots_index ? $meta_robots_index : 'index';
-						$robots['follow'] = $meta_robots_follow ? $meta_robots_follow : 'follow';
+						$robots['index']  = $meta_robots_index ?? 'index';
+						$robots['follow'] = $meta_robots_follow ?? 'follow';
 
 					}
 					if ( $this->yoast_activated ) {
-						$robots = ( $meta_robots_index ? $meta_robots_index : 'index' ) . ',' . ( $meta_robots_follow ? $meta_robots_follow : 'follow' );
+						$robots = ( $meta_robots_index ?? 'index' ) . ',' . ( $meta_robots_follow ?? 'follow' );
 					}
 				}
 			}
