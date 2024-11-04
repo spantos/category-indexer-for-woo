@@ -125,8 +125,11 @@ class WC_Category_Indexer_Admin {
 		if ( ! is_admin() ) {
 			return;
 		}
-		echo '<div class="wrap">';
+		echo '<div class="wrap">';	
 		$this->render_shop_section();
+		echo '<div class="submit_button">';
+		submit_button();
+		echo '</div>';
 		$this->render_orderby_section();
 		$this->render_url_with_parameters();
 
