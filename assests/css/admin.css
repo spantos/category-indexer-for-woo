@@ -14,3 +14,11 @@ td {
     padding-bottom: 10px !important;
     padding-top: 10px !important;
 }
+.submit_button{
+    position: fixed;
+    top: 30px;
+    left: 800px
+}
+.form-table td fieldset label{
+    margin-right: 10px !important;
+}
