@@ -127,9 +127,6 @@ class WC_Category_Indexer_Admin {
 		}
 		echo '<div class="wrap">';	
 		$this->render_shop_section();
-		echo '<div class="submit_button">';
-		submit_button();
-		echo '</div>';
 		$this->render_orderby_section();
 		$this->render_url_with_parameters();
 
@@ -143,7 +140,9 @@ class WC_Category_Indexer_Admin {
 		foreach ( $categories as $category ) {
 			$this->render_category_section( $category );
 		}
-
+		echo '<div class="submit_button">';
+		submit_button();
+		echo '</div>';
 		submit_button();
 		echo '</form>';
 		echo '</div>';
