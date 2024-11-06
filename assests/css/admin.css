@@ -17,7 +17,8 @@ td {
 .submit_button{
     position: fixed;
     top: 30px;
-    left: 800px
+    left: 800px;
+    z-index: 10000;
 }
 .form-table td fieldset label{
     margin-right: 10px !important;
