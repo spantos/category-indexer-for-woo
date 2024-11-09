@@ -149,7 +149,7 @@ class WC_Category_Indexer_Admin {
 	}
 
 	/**
-	 * Enqueues the admin JavaScript file for the WooCommerce Category Indexer plugin.
+	 * Enqueues the admin JavaScript and CSS file for the Category Indexer for WooCommerce plugin.
 	 *
 	 * This function is responsible for enqueuing the admin.js JavaScript file, which is used to provide
 	 * additional functionality for the WooCommerce Category Indexer plugin's admin page.
@@ -169,7 +169,7 @@ class WC_Category_Indexer_Admin {
 		if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
-				esc_html__( 'Plugin zahteva da se instalira i aktivira WooCommerce plugin', 'category-indexer-for-woo' ),
+				esc_html__( 'The plugin requires the WooCommerce plugin to be installed and activated', 'category-indexer-for-woo' ),
 				'',
 				array( 'back_link' => true )
 			);
@@ -186,7 +186,7 @@ class WC_Category_Indexer_Admin {
 	}
 
 	/**
-	 * Renders the shop section of the WooCommerce Category Indexer plugin's admin page.
+	 * Renders the shop section of the Category Indexer for WooCommerce plugin's admin page.
 	 *
 	 * This function is responsible for rendering the shop pages settings section of the plugin's admin page.
 	 * It includes options for setting the index and follow status of the first page and all other pages of the shop.
