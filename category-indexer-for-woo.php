@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * These constants are used throughout the plugin to provide version information,
  * file paths, and the text domain for internationalization.
  */
-defined( 'CATEGORY_INDEXER_VERSION' ) || define( 'CATEGORY_INDEXER_VERSION', '1' );
+defined( 'CATEGORY_INDEXER_VERSION' ) || define( 'CATEGORY_INDEXER_VERSION', '1.0.0' );
 defined( 'CATEGORY_INDEXER_PLUGIN_FILE' ) || define( 'CATEGORY_INDEXER_PLUGIN_FILE', basename( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_PLUGIN_DIR' ) || define( 'CATEGORY_INDEXER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_PLUGIN_URL' ) || define( 'CATEGORY_INDEXER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
