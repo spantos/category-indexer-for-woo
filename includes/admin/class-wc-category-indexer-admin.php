@@ -164,8 +164,10 @@ class WC_Category_Indexer_Admin {
 	 *
 	 * This function checks if the WooCommerce plugin and either the Rank Math SEO or Yoast SEO plugin are installed and activated.
 	 * If either of these required plugins are not installed and activated, the Category Indexer for WooCommerce plugin is deactivated and a message is displayed to the user.
+	 * It also checks if the PHP version is at least 7.0, and deactivates the plugin if the requirement is not met.
 	 */
-	public static function plugin_activation_check() {
+	
+	 public static function plugin_activation_check() {
 		if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
@@ -179,6 +181,16 @@ class WC_Category_Indexer_Admin {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
 				esc_html__( 'This plugin requires Rank Math SEO or Yoast SEO to be installed and activated. Please install and activate one of these plugins before activating Category Indexer for WooCommerce.', 'category-indexer-for-woo' ),
+				'',
+				array( 'back_link' => true )
+			);
+		}
+		if ( version_compare( phpversion(), '7.0', '>=' ) ){
+			return true;
+		}  else {
+			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
+			wp_die(
+				esc_html__( 'This plugin requires PHP version 7.0 or higher. Please update your PHP version before activating Category Indexer for WooCommerce.', 'category-indexer-for-woo' ),
 				'',
 				array( 'back_link' => true )
 			);
