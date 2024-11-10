@@ -156,7 +156,7 @@ class WC_Category_Indexer_Admin {
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'wc-category-indexer-admin', CATEGORY_INDEXER_PLUGIN_URL . 'assests/js/admin.js', array(), true, true );
-		wp_enqueue_style( 'wc-category-indexer-admin-css', CATEGORY_INDEXER_PLUGIN_URL . 'assests/css/admin.css', array(), false, 'all' );
+		wp_enqueue_style( 'wc-category-indexer-admin-css', CATEGORY_INDEXER_PLUGIN_URL . 'assests/css/admin.css', array(), true, 'all' );
 	}
 
 	/**
@@ -463,11 +463,11 @@ class WC_Category_Indexer_Admin {
 					<td>
 						<fieldset>
 							<label>
-								<input type="radio" radio-default='<?php echo esc_attr( $this->counter ); ?>' onclick='toggle(this)' name="wc_category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_first_page]" value="default" <?php checked( 'default', $options[ $category->term_id ]['default'] ?? 'default' ); ?>>
+								<input type="radio" radio-default='<?php echo esc_attr( $this->counter ); ?>' name="wc_category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_first_page]" value="default" <?php checked( 'default', $options[ $category->term_id ]['default'] ?? 'default' ); ?>>
 								<?php esc_html_e( 'Default', 'category-indexer-for-woo' ); ?>
 							</label>
 							<label>
-								<input type="radio" radio-custom='<?php echo esc_attr( $this->counter ); ?>' onclick='toggle(this)' name="wc_category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_first_page]" value="custom" <?php checked( 'custom', $options[ $category->term_id ]['canonical_first_page'] ?? '' ); ?>>
+								<input type="radio" radio-custom='<?php echo esc_attr( $this->counter ); ?>' name="wc_category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_first_page]" value="custom" <?php checked( 'custom', $options[ $category->term_id ]['canonical_first_page'] ?? '' ); ?>>
 								<?php esc_html_e( 'Custom', 'category-indexer-for-woo' ); ?>
 							</label>
 
@@ -478,7 +478,7 @@ class WC_Category_Indexer_Admin {
 									$disabled = 'disabled';
 								}
 								?>
-								<select select-category='<?php echo esc_attr( $this->counter ); ?>' name="wc_category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][custom_select]" <?php echo $disabled; ?>>
+								<select select-category='<?php echo esc_attr( $this->counter ); ?>' name="wc_category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][custom_select]" <?php echo esc_attr( $disabled ); ?>>
 									<?php
 									$all_categories = get_terms(
 										array(
@@ -488,7 +488,7 @@ class WC_Category_Indexer_Admin {
 									);
 									foreach ( $all_categories as $cat ) {
 										echo ( '<option value="' . esc_attr( $cat->term_id ) . '" ' . selected( $cat->term_id, $options[ $category->term_id ]['custom_select'] ?? '', false ) . '>' );
-										esc_html_e( $cat->name );
+										echo esc_html($cat->name);
 										echo '</option>';
 									}
 									?>
