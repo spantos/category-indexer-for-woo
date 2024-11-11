@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'WC_Category_Indexer' ) ) {
+if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 
 	/**
 	 * Manages the indexing and canonical URL settings for WooCommerce shop and product category pages.
@@ -14,7 +14,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 	 * It also handles special cases, such as when the current page has query parameters or when the WooCommerce order by filter is used.
 	 * The class provides methods to set the meta robots tag and the canonical URL for the current page, based on the configured options for the shop page and product category pages.
 	 */
-	class WC_Category_Indexer {
+	class Category_Indexer_For_Woo_Frontend {
 
 		private $rank_math_activated = false;
 		private $yoast_activated     = false;
@@ -23,7 +23,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 
 
 		/**
-		 * Initializes the WC_Category_Indexer class and sets up the necessary filters for Rank Math and Yoast SEO plugins.
+		 * Initializes the Category_Indexer_For_Woo_Frontend class and sets up the necessary filters for Rank Math and Yoast SEO plugins.
 		 *
 		 * This constructor method is responsible for the following tasks:
 		 * - Checks if the WooCommerce plugin is active, and returns if it is not.
@@ -131,7 +131,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 			if ( is_shop() || is_product_category() ) {
 				$current_page = get_query_var( 'paged' ) ?? 1;
 				if ( is_shop() ) {
-					$shop_page_index_option = get_option( 'wc_category_indexer_option_shop' );
+					$shop_page_index_option = get_option( 'category_indexer_option_shop' );
 					if ( $shop_page_index_option === false ) {
 						return $robots;
 					}
@@ -142,7 +142,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 				}
 				if ( is_product_category() ) {
 					$term                       = get_queried_object();
-					$category_page_index_option = ( get_option( 'wc_category_indexer_category_options' ) );
+					$category_page_index_option = ( get_option( 'category_indexer_category_options' ) );
 					if ( $category_page_index_option === false ) {
 						return $robots;
 					}
@@ -167,7 +167,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 					$robots = $meta_robots_index . ',' . $meta_robots_follow;
 				}
 
-				$url_parameters_options = get_option( 'wc_category_indexer_option_url_parameters' );
+				$url_parameters_options = get_option( 'category_indexer_option_url_parameters' );
 				if ( isset( $url_parameters_options ) ) {
 					if ( $this->has_url_parameters( $this->request_url ) ) {
 						$url_parameters_index  = $url_parameters_options['index'] ?? false;
@@ -183,7 +183,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 				}
 
 				// Override with WooCommerce order by filter settings if they are set
-				$orderby_filter_options = get_option( 'wc_category_indexer_option_orderby' );
+				$orderby_filter_options = get_option( 'category_indexer_option_orderby' );
 				if ( isset( $_GET['orderby'] ) ) {
 					if ( isset( $orderby_filter_options['noindex'] ) ) {
 						$meta_robots_index = 'noindex';
@@ -222,7 +222,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 			global $wp;
 			$current_page = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 			if ( is_shop() ) {
-				$canonical_option = get_option( 'wc_category_indexer_option_shop_canonical' );
+				$canonical_option = get_option( 'category_indexer_option_shop_canonical' );
 				if ( $canonical_option === false ) {
 					return esc_url( $canonical_url );
 				}
@@ -236,7 +236,7 @@ if ( ! class_exists( 'WC_Category_Indexer' ) ) {
 			}
 			if ( is_product_category() ) {
 				$current_category           = get_queried_object();
-				$category_canonical_options = get_option( 'wc_category_indexer_category_options' );
+				$category_canonical_options = get_option( 'category_indexer_category_options' );
 				if ( $category_canonical_options === false ) {
 					return esc_url( $canonical_url );
 				}
