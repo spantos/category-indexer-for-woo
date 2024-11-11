@@ -6,6 +6,7 @@
  * Plugin URI:
  * Description: Display and manage meta robots index and canonical options for WooCommerce categories and subcategories.
  * Version: 1.0.0
+ * Author: Slobodan Pantovic
  * Author URI:
  * Text Domain: category-indexer-for-woo
  * Domain Path: /languages
@@ -31,7 +32,7 @@ defined( 'CATEGORY_INDEXER_PLUGIN_URL' ) || define( 'CATEGORY_INDEXER_PLUGIN_URL
 defined( 'CATEGORY_INDEXER_TEXT_DOMAIN' ) || define( 'CATEGORY_INDEXER_TEXT_DOMAIN', 'category-indexer-for-woo' );
 
 
-if ( ! function_exists( 'wc_category_indexer_load_textdomain' ) ) {
+if ( ! function_exists( 'category_indexer_load_textdomain' ) ) {
 
  /**
   * Loads the translated strings for the Category Indexer for WooCommerce plugin.
@@ -42,22 +43,22 @@ if ( ! function_exists( 'wc_category_indexer_load_textdomain' ) ) {
   * @since 1.0.0
   * @return void
   */
- function wc_category_indexer_load_textdomain() {
+ function category_indexer_load_textdomain() {
     load_plugin_textdomain( CATEGORY_INDEXER_TEXT_DOMAIN, false, basename( __DIR__ ) . '/languages' );
  }
 }
  
-add_action( 'plugins_loaded', 'wc_category_indexer_load_textdomain' );
+add_action( 'plugins_loaded', 'category_indexer_load_textdomain' );
 
 
 /**
- * Includes the WC_Category_Indexer_Admin class and registers the plugin activation hook.
+ * Includes the Category_Indexer_For_Woo_Admin class and registers the plugin activation hook.
  *
- * This code ensures that the WC_Category_Indexer_Admin class is loaded when the plugin
+ * This code ensures that the Category_Indexer_For_Woo_Admin class is loaded when the plugin
  * is used on the admin pages of the website. It is responsible for initializing and
  * managing the admin-specific functionality of the Category Indexer for WooCommerce plugin.
  *
- * The `plugin_activation_check` method of the WC_Category_Indexer_Admin class is
+ * The `plugin_activation_check` method of the Category_Indexer_For_Woo_Admin class is
  * registered as a hook for the plugin activation event, allowing the plugin to perform
  * any necessary setup or checks during activation.
  *
@@ -65,16 +66,16 @@ add_action( 'plugins_loaded', 'wc_category_indexer_load_textdomain' );
  * @package PluginPackage
  */
 if ( is_admin() ) {
-require CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-wc-category-indexer-admin.php';
-register_activation_hook( __FILE__, array( 'WC_Category_Indexer_Admin', 'plugin_activation_check' ) );
+require CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-for-woo-admin.php';
+register_activation_hook( __FILE__, array( 'Category_Indexer_For_Woo_Admin', 'plugin_activation_check' ) );
 }
 
 
 /**
- * Includes the WC_Category_Indexer class, which provides the core functionality
+ * Includes the Category_Indexer_For_Woo_Frontend class, which provides the core functionality
  * for the Category Indexer for WooCommerce plugin.
  *
- * This code ensures that the WC_Category_Indexer class is loaded when the plugin
+ * This code ensures that the Category_Indexer_For_Woo_Frontend class is loaded when the plugin
  * is used on the front-end (non-admin) pages of the website. It is responsible
  * for initializing and managing the category indexing functionality.
  *
@@ -82,7 +83,7 @@ register_activation_hook( __FILE__, array( 'WC_Category_Indexer_Admin', 'plugin_
  * @package PluginPackage
  */
 if ( ! is_admin()){
-require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-wc-category-indexer.php';
+require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer_for_woo_frontend.php';
 }
 
 
@@ -90,23 +91,23 @@ require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-wc-category-indexer.p
  * Initializes the Category Indexer for WooCommerce plugin.
  *
  * This function checks if the current context is the admin area, and creates an instance of the
- * WC_Category_Indexer_Admin class if so. Otherwise, it creates an instance of the WC_Category_Indexer
+ * Category_Indexer_For_Woo_Admin class if so. Otherwise, it creates an instance of the Category_Indexer_For_Woo_Frontend
  * class to handle the front-end functionality of the plugin.
  *
- * The `wc_category_indexer_init` function is hooked to the `plugins_loaded` action, ensuring that
+ * The `category_indexer_init` function is hooked to the `plugins_loaded` action, ensuring that
  * the plugin is properly initialized when WordPress loads the plugins.
  *
  * @since 1.0.0
  * @return void
  */
-if (!function_exists('wc_category_indexer_init')) {
+if (!function_exists('category_indexer_init')) {
     
-    function wc_category_indexer_init() {
+    function category_indexer_init() {
         if ( is_admin () ) {
-        new WC_Category_Indexer_Admin ();
+        new Category_Indexer_For_Woo_Admin ();
     } else {
-        new WC_Category_Indexer ();
+        new Category_Indexer_For_Woo_Frontend ();
     }
 } 
 }
-add_action( 'plugins_loaded', 'wc_category_indexer_init' );
+add_action( 'plugins_loaded', 'category_indexer_init' );
