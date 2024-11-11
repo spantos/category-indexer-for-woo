@@ -8,7 +8,7 @@
  * Version: 1.0.0
  * Author: Slobodan Pantovic
  * Author URI:
- * Text Domain: category-indexer-for-woo
+ * Text Domain: category-indexer-for-woocommerce
  * Domain Path: /languages
  * License: GPL2
  */
@@ -29,7 +29,7 @@ defined( 'CATEGORY_INDEXER_VERSION' ) || define( 'CATEGORY_INDEXER_VERSION', '1.
 defined( 'CATEGORY_INDEXER_PLUGIN_FILE' ) || define( 'CATEGORY_INDEXER_PLUGIN_FILE', basename( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_PLUGIN_DIR' ) || define( 'CATEGORY_INDEXER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_PLUGIN_URL' ) || define( 'CATEGORY_INDEXER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-defined( 'CATEGORY_INDEXER_TEXT_DOMAIN' ) || define( 'CATEGORY_INDEXER_TEXT_DOMAIN', 'category-indexer-for-woo' );
+defined( 'CATEGORY_INDEXER_TEXT_DOMAIN' ) || define( 'CATEGORY_INDEXER_TEXT_DOMAIN', 'category-indexer-for-woocommerce' );
 
 
 if ( ! function_exists( 'category_indexer_load_textdomain' ) ) {
