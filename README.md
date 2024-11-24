@@ -19,7 +19,7 @@ WooCommerce Category Indexer is a powerful tool designed to help WooCommerce sto
 </ol>
 <h3>Manual Installation</h3>
 <ol>
-  <li>Download the plugin's ZIP file from the [WordPress plugin directory](https://wordpress.org/plugins/category-indexer-for-woocommerce/).
+  <li>Download the plugin's ZIP file from the <a href="https://wordpress.org/plugins/category-indexer-for-woocommerce/">WordPress plugin directory</a>.</li>
   <li>Unzip the file and upload the folder to your `/wp-content/plugins/` directory.</li>
   <li>Activate the plugin through the 'Plugins' menu in WordPress.</li>
 </ol>
