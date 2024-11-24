@@ -46,8 +46,8 @@ class Category_Indexer_For_Woo_Admin {
 	 */
 	public function add_admin_menu() {
 		add_menu_page(
-			esc_html__( 'Category Indexer', 'category-indexer-for-woo' ),
-			esc_html__( 'Category Indexer', 'category-indexer-for-woo' ),
+			esc_html__( 'Category Indexer', 'category-indexer-for-woocommerce' ),
+			esc_html__( 'Category Indexer', 'category-indexer-for-woocommerce' ),
 			'manage_options',
 			'wc-category-indexer',
 			array( $this, 'admin_page' ),
@@ -171,7 +171,7 @@ class Category_Indexer_For_Woo_Admin {
 		if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
-				esc_html__( 'The plugin requires the WooCommerce plugin to be installed and activated', 'category-indexer-for-woo' ),
+				esc_html__( 'The plugin requires the WooCommerce plugin to be installed and activated', 'category-indexer-for-woocommerce' ),
 				'',
 				array( 'back_link' => true )
 			);
@@ -180,7 +180,7 @@ class Category_Indexer_For_Woo_Admin {
 		if ( ! is_plugin_active( 'seo-by-rank-math/rank-math.php' ) && ! is_plugin_active( 'wordpress-seo/wp-seo.php', ) ) {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
-				esc_html__( 'This plugin requires Rank Math SEO or Yoast SEO to be installed and activated. Please install and activate one of these plugins before activating Category Indexer for WooCommerce.', 'category-indexer-for-woo' ),
+				esc_html__( 'This plugin requires Rank Math SEO or Yoast SEO to be installed and activated. Please install and activate one of these plugins before activating Category Indexer for WooCommerce.', 'category-indexer-for-woocommerce' ),
 				'',
 				array( 'back_link' => true )
 			);
@@ -190,7 +190,7 @@ class Category_Indexer_For_Woo_Admin {
 		}  else {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
-				esc_html__( 'This plugin requires PHP version 7.0 or higher. Please update your PHP version before activating Category Indexer for WooCommerce.', 'category-indexer-for-woo' ),
+				esc_html__( 'This plugin requires PHP version 7.0 or higher. Please update your PHP version before activating Category Indexer for WooCommerce.', 'category-indexer-for-woocommerce' ),
 				'',
 				array( 'back_link' => true )
 			);
@@ -207,59 +207,59 @@ class Category_Indexer_For_Woo_Admin {
 	public function render_shop_section() {
 		?>
 
-		<h1><?php esc_html_e( 'Category Indexer for WooCommerce', 'category-indexer-for-woo' ); ?></h1>
+		<h1><?php esc_html_e( 'Category Indexer for WooCommerce', 'category-indexer-for-woocommerce' ); ?></h1>
 		<form method="post" action="options.php">
 			<?php
 			$options = get_option( 'category_indexer_option_shop' );
 			settings_fields( 'category_indexer_options' );
 			do_settings_sections( 'category_indexer_options' );
 			?>
-			<h2><?php esc_html_e( 'Shop Pages Settings', 'category-indexer-for-woo' ); ?></h2>
+			<h2><?php esc_html_e( 'Shop Pages Settings', 'category-indexer-for-woocommerce' ); ?></h2>
 			<table class="form-table">
 				<tr>
-					<th><?php esc_html_e( 'First Page', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'First Page', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="radio" name="category_indexer_option_shop[shop_first_page_index]" value="index" <?php checked( 'index', $options['shop_first_page_index'] ?? '' ); ?>>
-								<?php esc_html_e( 'Index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_option_shop[shop_first_page_index]" value="noindex" <?php checked( 'noindex', $options['shop_first_page_index'] ?? '' ); ?>>
-								<?php esc_html_e( 'No index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<br>
 							<label>
 								<input type="radio" name="category_indexer_option_shop[shop_first_page_follow]" value="follow" <?php checked( 'follow', $options['shop_first_page_follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'Follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_option_shop[shop_first_page_follow]" value="nofollow" <?php checked( 'nofollow', $options['shop_first_page_follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'No follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 						</fieldset>
 					</td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'All Other Pages', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'All Other Pages', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="radio" name="category_indexer_option_shop[shop_all_other_page_index]" value="index" <?php checked( 'index', $options['shop_all_other_page_index'] ?? '' ); ?>>
-								<?php esc_html_e( 'Index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_option_shop[shop_all_other_page_index]" value="noindex" <?php checked( 'noindex', $options['shop_all_other_page_index'] ?? '' ); ?>>
-								<?php esc_html_e( 'No index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<br>
 							<label>
 								<input type="radio" name="category_indexer_option_shop[shop_all_other_page_follow]" value="follow" <?php checked( 'follow', $options['shop_all_other_page_follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'Follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_option_shop[shop_all_other_page_follow]" value="nofollow" <?php checked( 'nofollow', $options['shop_all_other_page_follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'No follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 						</fieldset>
 					</td>
@@ -268,16 +268,16 @@ class Category_Indexer_For_Woo_Admin {
 					<?php
 					$options = get_option( 'category_indexer_option_shop_canonical' );
 					?>
-					<th><?php esc_html_e( 'Canonical tag for pages after the first page', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'Canonical tag for pages after the first page', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="radio" name="category_indexer_option_shop_canonical[pages_after_first]" value="default" <?php checked( 'default', $options['pages_after_first'] ?? '' ); ?>>
-								<?php esc_html_e( 'Default (No Change)', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Default (No Change)', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_option_shop_canonical[pages_after_first]" value="first_page" <?php checked( 'first_page', $options['pages_after_first'] ?? '' ); ?>>
-								<?php esc_html_e( 'First page as a canonical link', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'First page as a canonical link', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<br>
 
@@ -304,20 +304,20 @@ class Category_Indexer_For_Woo_Admin {
 	public function render_orderby_section() {
 		$options = get_option( 'category_indexer_option_orderby' );
 		?>
-			<h2><?php esc_html_e( 'WooCommerce Order By Filter Settings', 'category-indexer-for-woo' ); ?></h2>
+			<h2><?php esc_html_e( 'WooCommerce Order By Filter Settings', 'category-indexer-for-woocommerce' ); ?></h2>
 			<table class="form-table">
 				<tr>
-					<th><?php esc_html_e( 'Filter "Order By" Settings', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'Filter "Order By" Settings', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="checkbox" name="category_indexer_option_orderby[noindex]" value="noindex" <?php checked( 'noindex', $options['noindex'] ?? '' ); ?>>
-								<?php esc_html_e( 'Noindex', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Noindex', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<br>
 							<label>
 								<input type="checkbox" name="category_indexer_option_orderby[nofollow]" value="nofollow" <?php checked( 'nofollow', $options['nofollow'] ?? '' ); ?>>
-								<?php esc_html_e( 'Nofollow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Nofollow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 						</fieldset>
 					</td>
@@ -334,28 +334,28 @@ class Category_Indexer_For_Woo_Admin {
  public function render_url_with_parameters() {
 		$options = get_option( 'category_indexer_option_url_parameters' );
 		?>
-			<h2><?php esc_html_e( 'URL with Parameters', 'category-indexer-for-woo' ); ?></h2>
+			<h2><?php esc_html_e( 'URL with Parameters', 'category-indexer-for-woocommerce' ); ?></h2>
 			<table class="form-table">
 				<tr>
-					<th><?php esc_html_e( 'URL with Parameters', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'URL with Parameters', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="radio" name="category_indexer_option_url_parameters[index]" value="index" <?php checked( 'index', $options['index'] ?? '' ); ?>>
-								<?php esc_html_e( 'Index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_option_url_parameters[index]" value="noindex" <?php checked( 'noindex', $options['index'] ?? '' ); ?>>
-								<?php esc_html_e( 'No index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<br>
 							<label>
 								<input type="radio" name="category_indexer_option_url_parameters[follow]" value="follow" <?php checked( 'follow', $options['follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'Follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_option_url_parameters[follow]" value="nofollow" <?php checked( 'nofollow', $options['follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'No follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 						</fieldset>
 					</td>
@@ -384,72 +384,72 @@ class Category_Indexer_For_Woo_Admin {
 		}
 		if ( $this->category_section_title === true ) {
 			$this->category_section_title = false;
-			echo '<h2>' . esc_html__( 'Category Archive Settings', 'category-indexer-for-woo' ) . '</h2>';
+			echo '<h2>' . esc_html__( 'Category Archive Settings', 'category-indexer-for-woocommerce' ) . '</h2>';
 		}
 		?>
 
 			<h3 class='category-section-title'>
 				<?php
 				echo esc_html( $category->name );
-				esc_html_e( ' Pages', 'category-indexer-for-woo' );
+				esc_html_e( ' Pages', 'category-indexer-for-woocommerce' );
 				?>
 			
 				<?php if ( $is_subcategory ) : ?>
 				<span>
 					<?php
-					esc_html_e( ' - Subcategory of ', 'category-indexer-for-woo' );
+					esc_html_e( ' - Subcategory of ', 'category-indexer-for-woocommerce' );
 					echo ( esc_html( $parent_category->name ) );
 					?>
 				</span></h3>
 			
 			<?php else : ?>
-				<span><?php esc_html_e( ' - Category', 'category-indexer-for-woo' ); ?></span></h3>
+				<span><?php esc_html_e( ' - Category', 'category-indexer-for-woocommerce' ); ?></span></h3>
 			<?php endif; ?>
 			<table class="form-table">
 				<tr>
-					<th><?php esc_html_e( 'First Page', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'First Page', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_index]" value="index" <?php checked( 'index', $options[ $category->term_id ]['first_page_index'] ?? 'index' ); ?>>
-								<?php esc_html_e( 'Index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_index]" value="noindex" <?php checked( 'noindex', $options[ $category->term_id ]['first_page_index'] ?? '' ); ?>>
-								<?php esc_html_e( 'No index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<br>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_follow]" value="follow" <?php checked( 'follow', $options[ $category->term_id ]['first_page_follow'] ?? 'follow' ); ?>>
-								<?php esc_html_e( 'Follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_follow]" value="nofollow" <?php checked( 'nofollow', $options[ $category->term_id ]['first_page_follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'No follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 						</fieldset>
 					</td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'All Other Pages', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'All Other Pages', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_index]" value="index" <?php checked( 'index', $options[ $category->term_id ]['all_other_pages_index'] ?? 'index' ); ?>>
-								<?php esc_html_e( 'Index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_index]" value="noindex" <?php checked( 'noindex', $options[ $category->term_id ]['all_other_pages_index'] ?? '' ); ?>>
-								<?php esc_html_e( 'No index', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<br>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_follow]" value="follow" <?php checked( 'follow', $options[ $category->term_id ]['all_other_pages_follow'] ?? 'follow' ); ?>>
-								<?php esc_html_e( 'Follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_follow]" value="nofollow" <?php checked( 'nofollow', $options[ $category->term_id ]['all_other_pages_follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'No follow', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 						</fieldset>
 					</td>
@@ -459,16 +459,16 @@ class Category_Indexer_For_Woo_Admin {
 			<h2></h2>
 			<table class="form-table">
 				<tr>
-					<th><?php esc_html_e( 'First Pge Canonical Tag', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'First Pge Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="radio" radio-default='<?php echo esc_attr( $this->counter ); ?>' name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_first_page]" value="default" <?php checked( 'default', $options[ $category->term_id ]['default'] ?? 'default' ); ?>>
-								<?php esc_html_e( 'Default', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Default', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" radio-custom='<?php echo esc_attr( $this->counter ); ?>' name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_first_page]" value="custom" <?php checked( 'custom', $options[ $category->term_id ]['canonical_first_page'] ?? '' ); ?>>
-								<?php esc_html_e( 'Custom', 'category-indexer-for-woo' ); ?>
+								<?php esc_html_e( 'Custom', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 
 							<label>
@@ -499,16 +499,16 @@ class Category_Indexer_For_Woo_Admin {
 					</td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'All Other Pgeas Canonical Tag', 'category-indexer-for-woo' ); ?></th>
+					<th><?php esc_html_e( 'All Other Pgeas Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="default" <?php checked( 'default', $options[ $category->term_id ]['default'] ?? 'default' ); ?>>
-									<?php esc_html_e( 'Default', 'category-indexer-for-woo' ); ?>
+									<?php esc_html_e( 'Default', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="from_first_page" <?php checked( 'from_first_page', $options[ $category->term_id ]['canonical_all_other_pages'] ?? '' ); ?>>
-									<?php esc_html_e( 'First page as a canonical link', 'category-indexer-for-woo' ); ?>
+									<?php esc_html_e( 'First page as a canonical link', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 						</fieldset>
 					</td>
