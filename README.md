@@ -16,7 +16,7 @@ WooCommerce Category Indexer is a powerful tool designed to help WooCommerce sto
 3. Search for 'Category Indexer'.
 4. Click 'Install Now' and then 'Activate'.
 ### Manual Installation
-1. Download the plugin's ZIP file from the [WordPress plugin directory](href="https://wordpress.org/plugins/category-indexer-for-woocommerce/)
+1. Download the plugin's ZIP file from the [WordPress plugin directory](https://wordpress.org/plugins/category-indexer-for-woocommerce/)
 2. Unzip the file and upload the folder to your `/wp-content/plugins/` directory.
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 ## Usage
