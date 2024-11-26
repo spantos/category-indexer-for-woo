@@ -65,7 +65,7 @@ add_action( 'plugins_loaded', 'category_indexer_load_textdomain' );
  * @since 1.0.0
  * @package PluginPackage
  */
-if ( is_admin() ) {
+if ( is_admin() && file_exists( CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-for-woo-admin.php' ) ) {
 require CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-for-woo-admin.php';
 register_activation_hook( __FILE__, array( 'Category_Indexer_For_Woo_Admin', 'plugin_activation_check' ) );
 }
@@ -82,7 +82,7 @@ register_activation_hook( __FILE__, array( 'Category_Indexer_For_Woo_Admin', 'pl
  * @since 1.0.0
  * @package PluginPackage
  */
-if ( ! is_admin()){
+if ( ! is_admin() && file_exists( CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer_for_woo_frontend.php' ) ) {
 require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer_for_woo_frontend.php';
 }
 
@@ -100,14 +100,16 @@ require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer_for_
  * @since 1.0.0
  * @return void
  */
-if (!function_exists('category_indexer_init')) {
+if ( !function_exists( 'category_indexer_init' ) ) {
     
     function category_indexer_init() {
-        if ( is_admin () ) {
-        new Category_Indexer_For_Woo_Admin ();
-    } else {
-        new Category_Indexer_For_Woo_Frontend ();
-    }
-} 
+        if ( is_admin () && class_exists( 'Category_Indexer_For_Woo_Admin' ) ) {
+                new Category_Indexer_For_Woo_Admin ();
+            } elseif ( ! is_admin () && class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
+                new Category_Indexer_For_Woo_Frontend ();        
+        } else {
+            return;
+        }
+    } 
 }
 add_action( 'plugins_loaded', 'category_indexer_init' );
