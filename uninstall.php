@@ -4,11 +4,11 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 $options = [
-    'wc_category_indexer_option_shop',
-    'wc_category_indexer_option_shop_canonical',
-    'wc_category_indexer_option_orderby',
-    'wc_category_indexer_option_url_parameters',
-    'wc_category_indexer_category_options'
+    'category_indexer_option_shop',
+    'category_indexer_option_shop_canonical',
+    'category_indexer_option_orderby',
+    'category_indexer_option_url_parameters',
+    'category_indexer_category_options'
 ];
 
 foreach ( $options as $option ) {
