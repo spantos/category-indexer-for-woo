@@ -5,7 +5,7 @@
  * @package PluginPackage
  * Plugin URI:
  * Description: Display and manage meta robots index and canonical options for WooCommerce categories and subcategories.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Slobodan Pantovic
  * Author URI:
  * Text Domain: category-indexer-for-woocommerce
