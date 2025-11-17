@@ -1,0 +1,25 @@
+.category-section-title {
+    color: #2271b1;
+}
+.category-section-title span {
+    color: #777;
+    font-size: 14px;
+}
+th {
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
+    vertical-align: middle !important;
+}
+td {
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
+}
+.submit_button{
+    position: fixed;
+    top: 30px;
+    left: 800px;
+    z-index: 10000;
+}
+.form-table td fieldset label{
+    margin-right: 10px !important;
+}
