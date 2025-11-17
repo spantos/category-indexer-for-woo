@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * These constants are used throughout the plugin to provide version information,
  * file paths, and the text domain for internationalization.
  */
-defined( 'CATEGORY_INDEXER_VERSION' ) || define( 'CATEGORY_INDEXER_VERSION', '1.0.0' );
+defined( 'CATEGORY_INDEXER_VERSION' ) || define( 'CATEGORY_INDEXER_VERSION', '1.0.1' );
 defined( 'CATEGORY_INDEXER_PLUGIN_FILE' ) || define( 'CATEGORY_INDEXER_PLUGIN_FILE', basename( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_PLUGIN_DIR' ) || define( 'CATEGORY_INDEXER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_PLUGIN_URL' ) || define( 'CATEGORY_INDEXER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -66,8 +66,8 @@ add_action( 'plugins_loaded', 'category_indexer_load_textdomain' );
  * @package PluginPackage
  */
 if ( is_admin() && file_exists( CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-for-woo-admin.php' ) ) {
-require CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-for-woo-admin.php';
-register_activation_hook( __FILE__, array( 'Category_Indexer_For_Woo_Admin', 'plugin_activation_check' ) );
+	require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-for-woo-admin.php';
+	register_activation_hook( __FILE__, array( 'Category_Indexer_For_Woo_Admin', 'plugin_activation_check' ) );
 }
 
 
@@ -82,8 +82,8 @@ register_activation_hook( __FILE__, array( 'Category_Indexer_For_Woo_Admin', 'pl
  * @since 1.0.0
  * @package PluginPackage
  */
-if ( ! is_admin() && file_exists( CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer_for_woo_frontend.php' ) ) {
-require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer_for_woo_frontend.php';
+if ( ! is_admin() && file_exists( CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer-for-woo-frontend.php' ) ) {
+	require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer-for-woo-frontend.php';
 }
 
 
@@ -100,16 +100,16 @@ require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/class-category-indexer_for_
  * @since 1.0.0
  * @return void
  */
-if ( !function_exists( 'category_indexer_init' ) ) {
-    
-    function category_indexer_init() {
-        if ( is_admin () && class_exists( 'Category_Indexer_For_Woo_Admin' ) ) {
-                new Category_Indexer_For_Woo_Admin ();
-            } elseif ( ! is_admin () && class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
-                new Category_Indexer_For_Woo_Frontend ();        
-        } else {
-            return;
-        }
-    } 
+if ( ! function_exists( 'category_indexer_init' ) ) {
+
+	function category_indexer_init() {
+		if ( is_admin() && class_exists( 'Category_Indexer_For_Woo_Admin' ) ) {
+			new Category_Indexer_For_Woo_Admin();
+		} elseif ( ! is_admin() && class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
+			new Category_Indexer_For_Woo_Frontend();
+		} else {
+			return;
+		}
+	}
 }
 add_action( 'plugins_loaded', 'category_indexer_init' );

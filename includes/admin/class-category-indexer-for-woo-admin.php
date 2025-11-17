@@ -143,7 +143,6 @@ class Category_Indexer_For_Woo_Admin {
 		echo '<div class="submit_button">';
 		submit_button();
 		echo '</div>';
-		submit_button();
 		echo '</form>';
 		echo '</div>';
 	}
@@ -155,8 +154,8 @@ class Category_Indexer_For_Woo_Admin {
 	 * additional functionality for the Category Indexer for WooCommerce plugin's admin page.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'wc-category-indexer-admin', CATEGORY_INDEXER_PLUGIN_URL . 'assests/js/admin.js', array(), true, true );
-		wp_enqueue_style( 'wc-category-indexer-admin-css', CATEGORY_INDEXER_PLUGIN_URL . 'assests/css/admin.css', array(), true, 'all' );
+		wp_enqueue_script( 'wc-category-indexer-admin', CATEGORY_INDEXER_PLUGIN_URL . 'assests/js/admin.js', array(), CATEGORY_INDEXER_VERSION, true );
+		wp_enqueue_style( 'wc-category-indexer-admin-css', CATEGORY_INDEXER_PLUGIN_URL . 'assests/css/admin.css', array(), CATEGORY_INDEXER_VERSION, 'all' );
 	}
 
 	/**
@@ -177,7 +176,7 @@ class Category_Indexer_For_Woo_Admin {
 			);
 		}
 
-		if ( ! is_plugin_active( 'seo-by-rank-math/rank-math.php' ) && ! is_plugin_active( 'wordpress-seo/wp-seo.php', ) ) {
+		if ( ! is_plugin_active( 'seo-by-rank-math/rank-math.php' ) && ! is_plugin_active( 'wordpress-seo/wp-seo.php' ) ) {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
 				esc_html__( 'This plugin requires Rank Math SEO or Yoast SEO to be installed and activated. Please install and activate one of these plugins before activating Category Indexer for WooCommerce.', 'category-indexer-for-woocommerce' ),
@@ -185,9 +184,9 @@ class Category_Indexer_For_Woo_Admin {
 				array( 'back_link' => true )
 			);
 		}
-		if ( version_compare( phpversion(), '7.0', '>=' ) ){
+		if ( version_compare( phpversion(), '7.0', '>=' ) ) {
 			return true;
-		}  else {
+		} else {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
 				esc_html__( 'This plugin requires PHP version 7.0 or higher. Please update your PHP version before activating Category Indexer for WooCommerce.', 'category-indexer-for-woocommerce' ),
@@ -285,10 +284,6 @@ class Category_Indexer_For_Woo_Admin {
 					</td>
 				</tr>
 			</table>
-				<?php
-				// submit_button();
-				?>
-
 			<?php
 	}
 
@@ -376,7 +371,7 @@ class Category_Indexer_For_Woo_Admin {
 	public function render_category_section( $category ) {
 		++$this->counter;
 		$options         = get_option( 'category_indexer_category_options' );
-		$is_subcategory  = ( $category->parent != 0 );
+		$is_subcategory  = ( $category->parent !== 0 );
 		$parent_category = null;
 
 		if ( $is_subcategory ) {
@@ -459,7 +454,7 @@ class Category_Indexer_For_Woo_Admin {
 			<h2></h2>
 			<table class="form-table">
 				<tr>
-					<th><?php esc_html_e( 'First Pge Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
+					<th><?php esc_html_e( 'First Page Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
@@ -488,7 +483,7 @@ class Category_Indexer_For_Woo_Admin {
 									);
 									foreach ( $all_categories as $cat ) {
 										echo ( '<option value="' . esc_attr( $cat->term_id ) . '" ' . selected( $cat->term_id, $options[ $category->term_id ]['custom_select'] ?? '', false ) . '>' );
-										echo esc_html($cat->name);
+										echo esc_html( $cat->name );
 										echo '</option>';
 									}
 									?>
@@ -499,7 +494,7 @@ class Category_Indexer_For_Woo_Admin {
 					</td>
 				</tr>
 				<tr>
-					<th><?php esc_html_e( 'All Other Pgeas Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
+					<th><?php esc_html_e( 'All Other Pages Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
