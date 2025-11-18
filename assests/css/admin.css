@@ -23,3 +23,9 @@ td {
 .form-table td fieldset label{
     margin-right: 10px !important;
 }
+
+/* Tab content styling */
+.tab-content {
+    margin-top: 20px;
+    padding: 20px 0;
+}

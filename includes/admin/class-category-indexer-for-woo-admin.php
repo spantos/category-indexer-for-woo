@@ -125,26 +125,66 @@ class Category_Indexer_For_Woo_Admin {
 		if ( ! is_admin() ) {
 			return;
 		}
-		echo '<div class="wrap">';	
-		$this->render_shop_section();
-		$this->render_orderby_section();
-		$this->render_url_with_parameters();
+		echo '<div class="wrap">';
+		echo '<h1>' . esc_html__( 'Category Indexer for WooCommerce', 'category-indexer-for-woocommerce' ) . '</h1>';
 
-		$categories = get_terms(
-			array(
-				'taxonomy'   => 'product_cat',
-				'hide_empty' => false,
-			)
-		);
+		// Tab navigation
+		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
+		?>
+		<h2 class="nav-tab-wrapper">
+			<a href="?page=wc-category-indexer&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( 'General', 'category-indexer-for-woocommerce' ); ?>
+			</a>
+			<a href="?page=wc-category-indexer&tab=categories" class="nav-tab <?php echo $active_tab == 'categories' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( 'Categories', 'category-indexer-for-woocommerce' ); ?>
+			</a>
+			<a href="?page=wc-category-indexer&tab=filters" class="nav-tab <?php echo $active_tab == 'filters' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( 'Filters', 'category-indexer-for-woocommerce' ); ?>
+			</a>
+		</h2>
 
-		foreach ( $categories as $category ) {
-			$this->render_category_section( $category );
-		}
-		echo '<div class="submit_button">';
-		submit_button();
-		echo '</div>';
-		submit_button();
-		echo '</form>';
+		<form method="post" action="options.php">
+			<?php
+			settings_fields( 'category_indexer_options' );
+			do_settings_sections( 'category_indexer_options' );
+			?>
+
+			<?php if ( $active_tab == 'general' ) : ?>
+				<div class="tab-content tab-general">
+					<?php
+					$this->render_shop_section();
+					$this->render_orderby_section();
+					$this->render_url_with_parameters();
+					?>
+				</div>
+			<?php elseif ( $active_tab == 'categories' ) : ?>
+				<div class="tab-content tab-categories">
+					<?php
+					$categories = get_terms(
+						array(
+							'taxonomy'   => 'product_cat',
+							'hide_empty' => false,
+						)
+					);
+
+					foreach ( $categories as $category ) {
+						$this->render_category_section( $category );
+					}
+					?>
+				</div>
+			<?php elseif ( $active_tab == 'filters' ) : ?>
+				<div class="tab-content tab-filters">
+					<h2><?php esc_html_e( 'Filters', 'category-indexer-for-woocommerce' ); ?></h2>
+					<p><?php esc_html_e( 'Filter settings will be available here in a future update.', 'category-indexer-for-woocommerce' ); ?></p>
+				</div>
+			<?php endif; ?>
+
+			<div class="submit_button">
+				<?php submit_button(); ?>
+			</div>
+			<?php submit_button(); ?>
+		</form>
+		<?php
 		echo '</div>';
 	}
 
@@ -205,15 +245,8 @@ class Category_Indexer_For_Woo_Admin {
 	 * It also includes an option for setting the canonical tag for pages after the first page.
 	 */
 	public function render_shop_section() {
+		$options = get_option( 'category_indexer_option_shop' );
 		?>
-
-		<h1><?php esc_html_e( 'Category Indexer for WooCommerce', 'category-indexer-for-woocommerce' ); ?></h1>
-		<form method="post" action="options.php">
-			<?php
-			$options = get_option( 'category_indexer_option_shop' );
-			settings_fields( 'category_indexer_options' );
-			do_settings_sections( 'category_indexer_options' );
-			?>
 			<h2><?php esc_html_e( 'Shop Pages Settings', 'category-indexer-for-woocommerce' ); ?></h2>
 			<table class="form-table">
 				<tr>
