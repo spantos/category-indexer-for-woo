@@ -62,7 +62,7 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 		 * and sets the canonical URL to an empty string if the robots meta tag is set to 'noindex'.
 		 */
 		public function custom_rank_math_canonical() {
-			if ( ! class_exists( 'RankMath\Paper\Paper' ) && ! method_exists( 'RankMath\Paper\Paper', 'get' ) ) {
+			if ( ! class_exists( 'RankMath\Paper\Paper' ) || ! method_exists( 'RankMath\Paper\Paper', 'get' ) ) {
 				return;
 			}
 			add_action(
@@ -184,7 +184,7 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 
 				// Override with WooCommerce order by filter settings if they are set
 				$orderby_filter_options = get_option( 'category_indexer_option_orderby' );
-				if ( isset( $_GET['orderby'] ) ) {
+				if ( isset( $_GET['orderby'] ) && ! empty( $GET_['orderby']) ) {
 					if ( isset( $orderby_filter_options['noindex'] ) ) {
 						$meta_robots_index = 'noindex';
 					}
