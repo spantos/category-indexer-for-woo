@@ -240,11 +240,11 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 				if ( $category_canonical_options === false ) {
 					return esc_url( $canonical_url );
 				}
-				$first_page_canonical = $category_canonical_options[ $current_category->term_id ]['canonical_first_page'];
+				$first_page_canonical = $category_canonical_options[ $current_category->term_id ]['canonical_first_page'] ?? 'default';
 				if ( $first_page_canonical === 'default' ) {
 					$canonical_first_page = home_url( add_query_arg( array(), $wp->request ) );
 				} elseif ( $first_page_canonical === 'custom' ) {
-					$canonical_first_page = esc_url( get_category_link( $category_canonical_options[ $current_category->term_id ]['custom_select'] ) );
+					$canonical_first_page = esc_url( get_category_link( $category_canonical_options[ $current_category->term_id ]['custom_select'] ?? '' ) );
 				}
 				if ( $current_page === 1 ) {
 					$canonical_url = $canonical_first_page;
