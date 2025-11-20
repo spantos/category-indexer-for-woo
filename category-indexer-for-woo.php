@@ -31,6 +31,20 @@ defined( 'CATEGORY_INDEXER_PLUGIN_DIR' ) || define( 'CATEGORY_INDEXER_PLUGIN_DIR
 defined( 'CATEGORY_INDEXER_PLUGIN_URL' ) || define( 'CATEGORY_INDEXER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_TEXT_DOMAIN' ) || define( 'CATEGORY_INDEXER_TEXT_DOMAIN', 'category-indexer-for-woocommerce' );
 
+/**
+ * Load the cache manager class.
+ *
+ * The cache manager is loaded early to ensure it's available for both
+ * admin and frontend contexts.
+ *
+ * @since 1.0.2
+ */
+if ( file_exists( CATEGORY_INDEXER_PLUGIN_DIR . 'includes/cache/class-category-cache.php' ) ) {
+	require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/cache/class-category-cache.php';
+	// Initialize the singleton instance
+	Category_Indexer_Cache::get_instance();
+}
+
 
 if ( ! function_exists( 'category_indexer_load_textdomain' ) ) {
 

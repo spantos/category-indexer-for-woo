@@ -15,7 +15,6 @@ class Category_Indexer_For_Woo_Admin {
 
 	private $category_section_title = true;
 	private $counter                = 0;
-	private $cached_categories      = null; // Cache for categories within request
 
 	/**
 	 * Initializes the Category_Indexer_For_Woo_Admin class.
@@ -24,18 +23,12 @@ class Category_Indexer_For_Woo_Admin {
 	 * - `admin_enqueue_scripts` - Enqueues the necessary scripts for the admin area.
 	 * - `admin_menu` - Adds the "Category Indexer" menu page to the WordPress admin menu.
 	 * - `admin_init` - Registers the settings for the plugin.
-	 * - Category change hooks - Clears cache when categories are created/edited/deleted.
 	 */
 	public function __construct() {
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
-
-		// Cache invalidation hooks
-		add_action( 'create_product_cat', array( $this, 'clear_categories_cache' ) );
-		add_action( 'edit_product_cat', array( $this, 'clear_categories_cache' ) );
-		add_action( 'delete_product_cat', array( $this, 'clear_categories_cache' ) );
 
 		// Handle manual cache clear
 		add_action( 'admin_post_cifw_clear_cache', array( $this, 'handle_manual_cache_clear' ) );
@@ -108,53 +101,6 @@ class Category_Indexer_For_Woo_Admin {
 	}
 
 	/**
-	 * Gets categories with caching support.
-	 *
-	 * First checks in-memory cache, then WordPress transient cache,
-	 * and finally fetches from database if needed.
-	 *
-	 * @return array Array of category term objects.
-	 */
-	private function get_cached_categories() {
-		// Check in-memory cache first
-		if ( $this->cached_categories !== null ) {
-			return $this->cached_categories;
-		}
-
-		// Check transient cache
-		$cache_key = 'cifw_product_categories';
-		$categories = get_transient( $cache_key );
-
-		if ( false === $categories ) {
-			// Fetch from database
-			$categories = get_terms(
-				array(
-					'taxonomy'   => 'product_cat',
-					'hide_empty' => false,
-				)
-			);
-
-			// Store in transient for 12 hours
-			set_transient( $cache_key, $categories, 12 * HOUR_IN_SECONDS );
-		}
-
-		// Store in-memory for this request
-		$this->cached_categories = $categories;
-
-		return $categories;
-	}
-
-	/**
-	 * Clears the categories cache.
-	 *
-	 * Called automatically when categories are created, edited, or deleted.
-	 */
-	public function clear_categories_cache() {
-		delete_transient( 'cifw_product_categories' );
-		$this->cached_categories = null;
-	}
-
-	/**
 	 * Handles manual cache clear request from admin.
 	 */
 	public function handle_manual_cache_clear() {
@@ -168,8 +114,8 @@ class Category_Indexer_For_Woo_Admin {
 			wp_die( esc_html__( 'You do not have permission to perform this action', 'category-indexer-for-woocommerce' ) );
 		}
 
-		// Clear the cache
-		$this->clear_categories_cache();
+		// Clear the cache using cache manager
+		Category_Indexer_Cache::get_instance()->clear_cache();
 
 		// Redirect back with success message
 		$redirect_url = add_query_arg(
@@ -253,8 +199,9 @@ class Category_Indexer_For_Woo_Admin {
 	 * Renders the content for the Categories tab with pagination and caching.
 	 */
 	public function render_categories_tab_content() {
-		// Get cached categories (only 1 database query)
-		$categories = $this->get_cached_categories();
+		// Get cached categories using cache manager (only 1 database query)
+		$cache_manager = Category_Indexer_Cache::get_instance();
+		$categories = $cache_manager->get_categories();
 
 		if ( empty( $categories ) ) {
 			echo '<p>' . esc_html__( 'No categories found.', 'category-indexer-for-woocommerce' ) . '</p>';
@@ -271,7 +218,7 @@ class Category_Indexer_For_Woo_Admin {
 		$paged_categories = array_slice( $categories, $offset, $per_page );
 
 		// Display cache clear button and info
-		$this->render_cache_info_section( $total_categories );
+		$this->render_cache_info_section( $total_categories, $cache_manager );
 
 		// Display pagination above categories if needed
 		if ( $total_pages > 1 ) {
@@ -292,20 +239,27 @@ class Category_Indexer_For_Woo_Admin {
 	/**
 	 * Renders the cache information section with clear cache button.
 	 *
-	 * @param int $total_categories Total number of categories.
+	 * @param int                      $total_categories Total number of categories.
+	 * @param Category_Indexer_Cache $cache_manager    Cache manager instance.
 	 */
-	private function render_cache_info_section( $total_categories ) {
+	private function render_cache_info_section( $total_categories, $cache_manager ) {
 		// Show success message if cache was cleared
 		if ( isset( $_GET['cache_cleared'] ) && $_GET['cache_cleared'] === '1' ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Cache cleared successfully!', 'category-indexer-for-woocommerce' ) . '</p></div>';
 		}
 
+		$cache_duration = $cache_manager->get_cache_duration_hours();
+		$cache_status = $cache_manager->is_cached() ? esc_html__( 'Active', 'category-indexer-for-woocommerce' ) : esc_html__( 'Empty', 'category-indexer-for-woocommerce' );
+
 		echo '<div style="background: #f0f0f1; padding: 15px; margin: 20px 0; border-left: 4px solid #2271b1;">';
 		echo '<p style="margin: 0 0 10px 0;"><strong>' . esc_html__( 'Categories Cache', 'category-indexer-for-woocommerce' ) . '</strong></p>';
 		echo '<p style="margin: 0 0 10px 0;">';
 		printf(
-			esc_html__( 'Total categories: %d | Categories are cached for 12 hours for better performance.', 'category-indexer-for-woocommerce' ),
-			$total_categories
+			/* translators: 1: total categories, 2: cache duration in hours, 3: cache status */
+			esc_html__( 'Total categories: %1$d | Cache duration: %2$d hours | Status: %3$s', 'category-indexer-for-woocommerce' ),
+			$total_categories,
+			$cache_duration,
+			$cache_status
 		);
 		echo '</p>';
 
