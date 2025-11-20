@@ -280,22 +280,21 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 				if ( $category_canonical_options === false ) {
 					return esc_url( $canonical_url );
 				}
-				$first_page_canonical = $category_canonical_options[ $current_category->term_id ]['canonical_first_page'];
-				if ( $first_page_canonical === 'default' ) {
-					$canonical_first_page = home_url( add_query_arg( array(), $wp->request ) );
-				} elseif ( $first_page_canonical === 'custom' ) {
-					$canonical_first_page = esc_url( get_category_link( $category_canonical_options[ $current_category->term_id ]['custom_select'] ) );
-				}
-				if ( $current_page === 1 ) {
-					$canonical_url = $canonical_first_page;
-				} elseif ( $current_page > 1 && ( $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'] ?? null ) === 'default' ) {
-					$canonical_url = home_url( add_query_arg( array(), $wp->request ) );
 
-				} elseif ( $current_page > 1 && ( $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'] ?? null ) === 'from_first_page' ) {
-					if ( $first_page_canonical === 'custom' ) {
-						$canonical_url = $canonical_first_page;
-					} else {
+				// For first page, use default canonical URL
+				if ( $current_page === 1 ) {
+					$canonical_url = home_url( add_query_arg( array(), $wp->request ) );
+				}
+				// For other pages, check canonical_all_other_pages setting
+				elseif ( $current_page > 1 ) {
+					$canonical_setting = $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'] ?? 'default';
+
+					if ( $canonical_setting === 'from_first_page' ) {
+						// Point to first page of the category
 						$canonical_url = get_term_link( $current_category->term_id, 'product_cat' );
+					} else {
+						// Use current page URL as canonical
+						$canonical_url = home_url( add_query_arg( array(), $wp->request ) );
 					}
 				}
 			}
