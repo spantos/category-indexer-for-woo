@@ -29,6 +29,7 @@ class Category_Indexer_For_Woo_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'wp_ajax_reset_category_settings', array( $this, 'ajax_reset_category_settings' ) );
 	}
 
 	/**
@@ -184,8 +185,18 @@ class Category_Indexer_For_Woo_Admin {
 	 * additional functionality for the Category Indexer for WooCommerce plugin's admin page.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'wc-category-indexer-admin', CATEGORY_INDEXER_PLUGIN_URL . 'assests/js/admin.js', array(), false, true );
+		wp_enqueue_script( 'wc-category-indexer-admin', CATEGORY_INDEXER_PLUGIN_URL . 'assests/js/admin.js', array( 'jquery' ), false, true );
 		wp_enqueue_style( 'wc-category-indexer-admin-css', CATEGORY_INDEXER_PLUGIN_URL . 'assests/css/admin.css', array(), false, 'all' );
+
+		// Localize script for AJAX
+		wp_localize_script(
+			'wc-category-indexer-admin',
+			'categoryIndexerAjax',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'reset_category_settings_nonce' ),
+			)
+		);
 	}
 
 	/**
@@ -456,7 +467,10 @@ class Category_Indexer_For_Woo_Admin {
 		}
 		if ( $this->category_section_title === true ) {
 			$this->category_section_title = false;
-			echo '<h2>' . esc_html__( 'Category Archive Settings', 'category-indexer-for-woocommerce' ) . '</h2>';
+			echo '<div style="display: flex; align-items: center; gap: 15px;">';
+			echo '<h2 style="margin: 0;">' . esc_html__( 'Category Archive Settings', 'category-indexer-for-woocommerce' ) . '</h2>';
+			echo '<button type="button" id="reset-category-settings" class="button button-secondary">' . esc_html__( 'Reset All Categories to Default', 'category-indexer-for-woocommerce' ) . '</button>';
+			echo '</div>';
 		}
 		?>
 
@@ -587,5 +601,42 @@ class Category_Indexer_For_Woo_Admin {
 				</tr>
 			</table>
 		<?php
+	}
+
+	/**
+	 * AJAX handler for resetting all category settings to default.
+	 *
+	 * This function handles the AJAX request to reset all category settings.
+	 * It verifies the nonce for security, deletes the category options, and returns a JSON response.
+	 */
+	public function ajax_reset_category_settings() {
+		// Check nonce for security
+		check_ajax_referer( 'reset_category_settings_nonce', 'nonce' );
+
+		// Check user capabilities
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You do not have permission to perform this action.', 'category-indexer-for-woocommerce' ),
+				)
+			);
+		}
+
+		// Delete the category options
+		$deleted = delete_option( 'category_indexer_category_options' );
+
+		if ( $deleted ) {
+			wp_send_json_success(
+				array(
+					'message' => __( 'All category settings have been reset to default.', 'category-indexer-for-woocommerce' ),
+				)
+			);
+		} else {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Failed to reset category settings. They may already be at default values.', 'category-indexer-for-woocommerce' ),
+				)
+			);
+		}
 	}
 }
