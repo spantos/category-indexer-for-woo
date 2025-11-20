@@ -86,11 +86,12 @@ class Category_Indexer_For_Woo_Admin {
 			'type'              => 'array',
 		);
 
-		// Register settings for the General tab (shop, orderby, url parameters)
+		// Register settings for the General tab (shop, orderby, url parameters, search)
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_shop', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_shop_canonical', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_orderby', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_url_parameters', $register_setting_args );
+		register_setting( 'category_indexer_general_options', 'category_indexer_option_search', $register_setting_args );
 
 		// Register settings for the Categories tab
 		register_setting( 'category_indexer_category_options_group', 'category_indexer_category_options', $register_setting_args );
@@ -157,6 +158,7 @@ class Category_Indexer_For_Woo_Admin {
 		$this->render_shop_section_content();
 		$this->render_orderby_section();
 		$this->render_url_with_parameters();
+		$this->render_search_section();
 	}
 
 	/**
@@ -373,6 +375,60 @@ class Category_Indexer_For_Woo_Admin {
 								<input type="radio" name="category_indexer_option_url_parameters[follow]" value="nofollow" <?php checked( 'nofollow', $options['follow'] ?? '' ); ?>>
 								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
 							</label>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+
+		<?php
+	}
+
+	/**
+	 * Renders the search section of the admin settings page.
+	 *
+	 * This function is responsible for rendering the HTML for the search pages settings section.
+	 * It displays options for controlling the meta robots tag and canonical tag for site search results.
+	 */
+	public function render_search_section() {
+		$options = get_option( 'category_indexer_option_search' );
+		?>
+			<h2><?php esc_html_e( 'Site Search Settings', 'category-indexer-for-woocommerce' ); ?></h2>
+			<table class="form-table">
+				<tr>
+					<th><?php esc_html_e( 'Meta Robots Tag', 'category-indexer-for-woocommerce' ); ?></th>
+					<td>
+						<fieldset>
+							<label>
+								<input type="radio" name="category_indexer_option_search[index]" value="index" <?php checked( 'index', $options['index'] ?? '' ); ?>>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_option_search[index]" value="noindex" <?php checked( 'noindex', $options['index'] ?? '' ); ?>>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<br>
+							<label>
+								<input type="radio" name="category_indexer_option_search[follow]" value="follow" <?php checked( 'follow', $options['follow'] ?? '' ); ?>>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_option_search[follow]" value="nofollow" <?php checked( 'nofollow', $options['follow'] ?? '' ); ?>>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<th><?php esc_html_e( 'Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
+					<td>
+						<fieldset>
+							<label>
+								<input type="checkbox" name="category_indexer_option_search[canonical_to_homepage]" value="yes" <?php checked( 'yes', $options['canonical_to_homepage'] ?? '' ); ?>>
+								<?php esc_html_e( 'Set canonical tag to homepage', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<p class="description">
+								<?php esc_html_e( 'When enabled, all search result pages will have a canonical tag pointing to the site homepage.', 'category-indexer-for-woocommerce' ); ?>
+							</p>
 						</fieldset>
 					</td>
 				</tr>

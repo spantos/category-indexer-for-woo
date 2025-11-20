@@ -128,6 +128,24 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 				return $robots;
 			}
 
+			// Handle search pages
+			if ( is_search() ) {
+				$search_options = get_option( 'category_indexer_option_search' );
+				if ( $search_options !== false ) {
+					$meta_robots_index  = $search_options['index'] ?? 'index';
+					$meta_robots_follow = $search_options['follow'] ?? 'follow';
+
+					if ( $this->rank_math_activated ) {
+						$robots['index']  = $meta_robots_index;
+						$robots['follow'] = $meta_robots_follow;
+					}
+					if ( $this->yoast_activated ) {
+						$robots = $meta_robots_index . ',' . $meta_robots_follow;
+					}
+				}
+				return $robots;
+			}
+
 			if ( is_shop() || is_product_category() ) {
 				$current_page = get_query_var( 'paged' ) ?? 1;
 				if ( is_shop() ) {
@@ -220,6 +238,28 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 				return esc_url( $canonical_url );
 			}
 			global $wp;
+
+			// Handle search pages
+			if ( is_search() ) {
+				$search_options = get_option( 'category_indexer_option_search' );
+				if ( $search_options !== false && isset( $search_options['canonical_to_homepage'] ) && $search_options['canonical_to_homepage'] === 'yes' ) {
+					$canonical_url = home_url( '/' );
+				}
+
+				if ( $this->rank_math_activated ) {
+					if ( $this->robots_noindex === 'noindex' ) {
+						echo '<link rel="canonical" href="' . esc_url( $canonical_url ) . '" />';
+						return;
+					} else {
+						return esc_url( $canonical_url );
+					}
+				}
+				if ( $this->yoast_activated ) {
+					return esc_url( $canonical_url );
+				}
+				return esc_url( $canonical_url );
+			}
+
 			$current_page = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 			if ( is_shop() ) {
 				$canonical_option = get_option( 'category_indexer_option_shop_canonical' );
