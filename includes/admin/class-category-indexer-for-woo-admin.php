@@ -29,6 +29,7 @@ class Category_Indexer_For_Woo_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_init', array( $this, 'handle_admin_actions' ) );
 	}
 
 	/**
@@ -95,6 +96,61 @@ class Category_Indexer_For_Woo_Admin {
 
 		// Register settings for the Categories tab
 		register_setting( 'category_indexer_category_options_group', 'category_indexer_category_options', $register_setting_args );
+	}
+
+	/**
+	 * Handles admin actions like reset categories and clear cache.
+	 */
+	public function handle_admin_actions() {
+		// Check if we're on the plugin page
+		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'wc-category-indexer' ) {
+			return;
+		}
+
+		// Handle reset categories action
+		if ( isset( $_POST['reset_categories'] ) && check_admin_referer( 'category_indexer_reset_categories' ) ) {
+			delete_option( 'category_indexer_category_options' );
+			$this->delete_categories_cache();
+			wp_safe_redirect( add_query_arg( array( 'page' => 'wc-category-indexer', 'tab' => 'categories', 'reset' => 'success' ), admin_url( 'admin.php' ) ) );
+			exit;
+		}
+
+		// Handle clear cache action
+		if ( isset( $_POST['clear_cache'] ) && check_admin_referer( 'category_indexer_clear_cache' ) ) {
+			$this->delete_categories_cache();
+			wp_safe_redirect( add_query_arg( array( 'page' => 'wc-category-indexer', 'tab' => 'categories', 'cache_cleared' => 'success' ), admin_url( 'admin.php' ) ) );
+			exit;
+		}
+	}
+
+	/**
+	 * Deletes the categories cache.
+	 */
+	private function delete_categories_cache() {
+		delete_transient( 'category_indexer_categories_list' );
+	}
+
+	/**
+	 * Gets categories with caching.
+	 *
+	 * @return array Array of category terms.
+	 */
+	private function get_cached_categories() {
+		$cached_categories = get_transient( 'category_indexer_categories_list' );
+
+		if ( false === $cached_categories ) {
+			$cached_categories = get_terms(
+				array(
+					'taxonomy'   => 'product_cat',
+					'hide_empty' => false,
+				)
+			);
+
+			// Cache for 12 hours
+			set_transient( 'category_indexer_categories_list', $cached_categories, 12 * HOUR_IN_SECONDS );
+		}
+
+		return $cached_categories;
 	}
 
 	/**
@@ -165,12 +221,15 @@ class Category_Indexer_For_Woo_Admin {
 	 * Renders the content for the Categories tab.
 	 */
 	public function render_categories_tab_content() {
-		$categories = get_terms(
-			array(
-				'taxonomy'   => 'product_cat',
-				'hide_empty' => false,
-			)
-		);
+		// Display success messages
+		if ( isset( $_GET['reset'] ) && $_GET['reset'] === 'success' ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Categories have been reset to default values.', 'category-indexer-for-woocommerce' ) . '</p></div>';
+		}
+		if ( isset( $_GET['cache_cleared'] ) && $_GET['cache_cleared'] === 'success' ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Cache has been cleared successfully.', 'category-indexer-for-woocommerce' ) . '</p></div>';
+		}
+
+		$categories = $this->get_cached_categories();
 
 		foreach ( $categories as $category ) {
 			$this->render_category_section( $category );
@@ -456,7 +515,21 @@ class Category_Indexer_For_Woo_Admin {
 		}
 		if ( $this->category_section_title === true ) {
 			$this->category_section_title = false;
-			echo '<h2>' . esc_html__( 'Category Archive Settings', 'category-indexer-for-woocommerce' ) . '</h2>';
+			echo '<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">';
+			echo '<h2 style="margin: 0;">' . esc_html__( 'Category Archive Settings', 'category-indexer-for-woocommerce' ) . '</h2>';
+			echo '<div>';
+			// Reset Categories Button
+			echo '<form method="post" style="display: inline-block; margin-right: 10px;">';
+			wp_nonce_field( 'category_indexer_reset_categories' );
+			echo '<input type="submit" name="reset_categories" class="button button-secondary" value="' . esc_attr__( 'Reset Categories to Default', 'category-indexer-for-woocommerce' ) . '" onclick="return confirm(\'' . esc_js__( 'Are you sure you want to reset all category settings to default values?', 'category-indexer-for-woocommerce' ) . '\');" />';
+			echo '</form>';
+			// Clear Cache Button
+			echo '<form method="post" style="display: inline-block;">';
+			wp_nonce_field( 'category_indexer_clear_cache' );
+			echo '<input type="submit" name="clear_cache" class="button button-secondary" value="' . esc_attr__( 'Clear Cache', 'category-indexer-for-woocommerce' ) . '" />';
+			echo '</form>';
+			echo '</div>';
+			echo '</div>';
 		}
 		?>
 
