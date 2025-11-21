@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
          // Make AJAX request
          const formData = new FormData();
          formData.append('action', 'reset_category_settings');
-         formData.append('nonce', categoryIndexerAjax.nonce);
+         formData.append('nonce', categoryIndexerAjax.reset_nonce);
 
          fetch(categoryIndexerAjax.ajax_url, {
             method: 'POST',
@@ -46,6 +46,51 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred while resetting settings.');
             resetButton.disabled = false;
             resetButton.textContent = 'Reset All Categories to Default';
+         });
+      });
+   }
+
+   // Clear category cache button
+   const clearCacheButton = document.getElementById('clear-category-cache');
+   if (clearCacheButton) {
+      clearCacheButton.addEventListener('click', function(e) {
+         e.preventDefault();
+
+         // Confirm with user before clearing cache
+         if (!confirm('Are you sure you want to clear the category cache? The cache will be rebuilt automatically on the next page load.')) {
+            return;
+         }
+
+         // Disable button during request
+         clearCacheButton.disabled = true;
+         clearCacheButton.textContent = 'Clearing...';
+
+         // Make AJAX request
+         const formData = new FormData();
+         formData.append('action', 'clear_category_cache');
+         formData.append('nonce', categoryIndexerAjax.clear_cache_nonce);
+
+         fetch(categoryIndexerAjax.ajax_url, {
+            method: 'POST',
+            body: formData
+         })
+         .then(response => response.json())
+         .then(data => {
+            if (data.success) {
+               alert(data.data.message);
+               // Reload the page to rebuild cache
+               window.location.reload();
+            } else {
+               alert(data.data.message || 'An error occurred.');
+               clearCacheButton.disabled = false;
+               clearCacheButton.textContent = 'Clear Cache';
+            }
+         })
+         .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while clearing cache.');
+            clearCacheButton.disabled = false;
+            clearCacheButton.textContent = 'Clear Cache';
          });
       });
    }

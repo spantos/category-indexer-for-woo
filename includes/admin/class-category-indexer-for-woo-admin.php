@@ -26,10 +26,17 @@ class Category_Indexer_For_Woo_Admin {
 	 */
 	public function __construct() {
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+		// Include cache class
+		if ( file_exists( CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-cache.php' ) ) {
+			require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-cache.php';
+		}
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'wp_ajax_reset_category_settings', array( $this, 'ajax_reset_category_settings' ) );
+		add_action( 'wp_ajax_clear_category_cache', array( $this, 'ajax_clear_category_cache' ) );
 	}
 
 	/**
@@ -163,18 +170,109 @@ class Category_Indexer_For_Woo_Admin {
 	}
 
 	/**
-	 * Renders the content for the Categories tab.
+	 * Renders the content for the Categories tab with pagination.
 	 */
 	public function render_categories_tab_content() {
-		$categories = get_terms(
-			array(
-				'taxonomy'   => 'product_cat',
-				'hide_empty' => false,
-			)
-		);
+		// Get all data from cache (single database access)
+		if ( class_exists( 'Category_Indexer_Cache' ) ) {
+			$categories  = Category_Indexer_Cache::get_categories();
+			$options     = Category_Indexer_Cache::get_category_options();
+			$parents_map = Category_Indexer_Cache::get_parents_map();
+		} else {
+			$categories = get_terms(
+				array(
+					'taxonomy'   => 'product_cat',
+					'hide_empty' => false,
+					'orderby'    => 'name',
+					'order'      => 'ASC',
+				)
+			);
+			$options     = get_option( 'category_indexer_category_options', array() );
+			$parents_map = array();
+		}
 
-		foreach ( $categories as $category ) {
-			$this->render_category_section( $category );
+		// Pagination settings
+		$per_page     = 20;
+		$current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
+		$total_items  = count( $categories );
+		$total_pages  = ceil( $total_items / $per_page );
+		$offset       = ( $current_page - 1 ) * $per_page;
+
+		// Get categories for current page
+		$paged_categories = array_slice( $categories, $offset, $per_page );
+
+		// Render pagination info and clear cache button
+		echo '<div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">';
+		echo '<div class="tablenav-pages">';
+		echo '<span class="displaying-num">' . sprintf( esc_html__( '%s categories', 'category-indexer-for-woocommerce' ), number_format_i18n( $total_items ) ) . '</span>';
+
+		if ( $total_pages > 1 ) {
+			echo '<span class="pagination-links">';
+
+			// First page
+			if ( $current_page > 1 ) {
+				echo '<a class="first-page button" href="' . esc_url( add_query_arg( 'paged', 1 ) ) . '">&laquo;</a> ';
+				echo '<a class="prev-page button" href="' . esc_url( add_query_arg( 'paged', $current_page - 1 ) ) . '">&lsaquo;</a> ';
+			} else {
+				echo '<span class="tablenav-pages-navspan button disabled">&laquo;</span> ';
+				echo '<span class="tablenav-pages-navspan button disabled">&lsaquo;</span> ';
+			}
+
+			echo '<span class="paging-input">';
+			echo '<span class="tablenav-paging-text">' . sprintf( esc_html__( '%1$s of %2$s', 'category-indexer-for-woocommerce' ), number_format_i18n( $current_page ), number_format_i18n( $total_pages ) ) . '</span>';
+			echo '</span> ';
+
+			// Next and last page
+			if ( $current_page < $total_pages ) {
+				echo '<a class="next-page button" href="' . esc_url( add_query_arg( 'paged', $current_page + 1 ) ) . '">&rsaquo;</a> ';
+				echo '<a class="last-page button" href="' . esc_url( add_query_arg( 'paged', $total_pages ) ) . '">&raquo;</a>';
+			} else {
+				echo '<span class="tablenav-pages-navspan button disabled">&rsaquo;</span> ';
+				echo '<span class="tablenav-pages-navspan button disabled">&raquo;</span>';
+			}
+
+			echo '</span>';
+		}
+
+		echo '</div>';
+
+		// Clear cache button
+		echo '<button type="button" id="clear-category-cache" class="button button-secondary">' . esc_html__( 'Clear Cache', 'category-indexer-for-woocommerce' ) . '</button>';
+		echo '</div>';
+
+		// Render categories for current page
+		foreach ( $paged_categories as $category ) {
+			$this->render_category_section( $category, $options, $parents_map );
+		}
+
+		// Bottom pagination
+		if ( $total_pages > 1 ) {
+			echo '<div class="tablenav-pages" style="margin-top: 20px;">';
+			echo '<span class="displaying-num">' . sprintf( esc_html__( '%s categories', 'category-indexer-for-woocommerce' ), number_format_i18n( $total_items ) ) . '</span>';
+			echo '<span class="pagination-links">';
+
+			if ( $current_page > 1 ) {
+				echo '<a class="first-page button" href="' . esc_url( add_query_arg( 'paged', 1 ) ) . '">&laquo;</a> ';
+				echo '<a class="prev-page button" href="' . esc_url( add_query_arg( 'paged', $current_page - 1 ) ) . '">&lsaquo;</a> ';
+			} else {
+				echo '<span class="tablenav-pages-navspan button disabled">&laquo;</span> ';
+				echo '<span class="tablenav-pages-navspan button disabled">&lsaquo;</span> ';
+			}
+
+			echo '<span class="paging-input">';
+			echo '<span class="tablenav-paging-text">' . sprintf( esc_html__( '%1$s of %2$s', 'category-indexer-for-woocommerce' ), number_format_i18n( $current_page ), number_format_i18n( $total_pages ) ) . '</span>';
+			echo '</span> ';
+
+			if ( $current_page < $total_pages ) {
+				echo '<a class="next-page button" href="' . esc_url( add_query_arg( 'paged', $current_page + 1 ) ) . '">&rsaquo;</a> ';
+				echo '<a class="last-page button" href="' . esc_url( add_query_arg( 'paged', $total_pages ) ) . '">&raquo;</a>';
+			} else {
+				echo '<span class="tablenav-pages-navspan button disabled">&rsaquo;</span> ';
+				echo '<span class="tablenav-pages-navspan button disabled">&raquo;</span>';
+			}
+
+			echo '</span>';
+			echo '</div>';
 		}
 	}
 
@@ -193,8 +291,9 @@ class Category_Indexer_For_Woo_Admin {
 			'wc-category-indexer-admin',
 			'categoryIndexerAjax',
 			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'reset_category_settings_nonce' ),
+				'ajax_url'         => admin_url( 'admin-ajax.php' ),
+				'reset_nonce'      => wp_create_nonce( 'reset_category_settings_nonce' ),
+				'clear_cache_nonce' => wp_create_nonce( 'clear_category_cache_nonce' ),
 			)
 		);
 	}
@@ -455,16 +554,29 @@ class Category_Indexer_For_Woo_Admin {
 	 * It displays the category name, whether it is a subcategory, and options for controlling the indexing and following of the category pages.
 	 *
 	 * @param WP_Term $category The category object for which to render the settings.
+	 * @param array   $options Category options array (passed from parent to avoid repeated DB calls).
+	 * @param array   $parents_map Map of parent categories (passed from parent to avoid repeated DB calls).
 	 */
-	public function render_category_section( $category ) {
+	public function render_category_section( $category, $options = array(), $parents_map = array() ) {
 		++$this->counter;
-		$options         = get_option( 'category_indexer_category_options' );
+
+		// Use passed options or fetch them if not provided (backwards compatibility)
+		if ( empty( $options ) ) {
+			$options = get_option( 'category_indexer_category_options' );
+		}
+
 		$is_subcategory  = ( $category->parent !== 0 );
 		$parent_category = null;
 
 		if ( $is_subcategory ) {
-			$parent_category = get_term( $category->parent, 'product_cat' );
+			// Use parents map if available, otherwise fetch from DB
+			if ( isset( $parents_map[ $category->term_id ] ) ) {
+				$parent_category = $parents_map[ $category->term_id ];
+			} else {
+				$parent_category = get_term( $category->parent, 'product_cat' );
+			}
 		}
+
 		if ( $this->category_section_title === true ) {
 			$this->category_section_title = false;
 			echo '<div style="display: flex; align-items: center; gap: 15px;">';
@@ -545,52 +657,12 @@ class Category_Indexer_For_Woo_Admin {
 			<h2></h2>
 			<table class="form-table">
 				<tr>
-					<th><?php esc_html_e( 'First Page Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
+					<th><?php esc_html_e( 'Canonical Tag for Pages After First', 'category-indexer-for-woocommerce' ); ?></th>
 					<td>
 						<fieldset>
 							<label>
-								<input type="radio" radio-default='<?php echo esc_attr( $this->counter ); ?>' name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_first_page]" value="default" <?php checked( 'default', $options[ $category->term_id ]['default'] ?? 'default' ); ?>>
-								<?php esc_html_e( 'Default', 'category-indexer-for-woocommerce' ); ?>
-							</label>
-							<label>
-								<input type="radio" radio-custom='<?php echo esc_attr( $this->counter ); ?>' name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_first_page]" value="custom" <?php checked( 'custom', $options[ $category->term_id ]['canonical_first_page'] ?? '' ); ?>>
-								<?php esc_html_e( 'Custom', 'category-indexer-for-woocommerce' ); ?>
-							</label>
-
-							<label>
-								<?php
-								$disabled = isset( $options[ $category->term_id ]['canonical_first_page'] ) && $options[ $category->term_id ]['canonical_first_page'] === 'default' ? 'disabled' : '';
-								if ( ! isset( $options[ $category->term_id ]['canonical_first_page'] ) ) {
-									$disabled = 'disabled';
-								}
-								?>
-								<select select-category='<?php echo esc_attr( $this->counter ); ?>' name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][custom_select]" <?php echo esc_attr( $disabled ); ?>>
-									<?php
-									$all_categories = get_terms(
-										array(
-											'taxonomy'   => 'product_cat',
-											'hide_empty' => false,
-										)
-									);
-									foreach ( $all_categories as $cat ) {
-										echo ( '<option value="' . esc_attr( $cat->term_id ) . '" ' . selected( $cat->term_id, $options[ $category->term_id ]['custom_select'] ?? '', false ) . '>' );
-										echo esc_html( $cat->name );
-										echo '</option>';
-									}
-									?>
-								</select>
-							</label>
-
-						</fieldset>
-					</td>
-				</tr>
-				<tr>
-					<th><?php esc_html_e( 'All Other Pages Canonical Tag', 'category-indexer-for-woocommerce' ); ?></th>
-					<td>
-						<fieldset>
-							<label>
-								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="default" <?php checked( 'default', $options[ $category->term_id ]['default'] ?? 'default' ); ?>>
-									<?php esc_html_e( 'Default', 'category-indexer-for-woocommerce' ); ?>
+								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="default" <?php checked( 'default', $options[ $category->term_id ]['canonical_all_other_pages'] ?? 'default' ); ?>>
+									<?php esc_html_e( 'Default (No Change)', 'category-indexer-for-woocommerce' ); ?>
 							</label>
 							<label>
 								<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="from_first_page" <?php checked( 'from_first_page', $options[ $category->term_id ]['canonical_all_other_pages'] ?? '' ); ?>>
@@ -625,6 +697,11 @@ class Category_Indexer_For_Woo_Admin {
 		// Delete the category options
 		$deleted = delete_option( 'category_indexer_category_options' );
 
+		// Clear cache after resetting settings
+		if ( class_exists( 'Category_Indexer_Cache' ) ) {
+			Category_Indexer_Cache::clear_cache();
+		}
+
 		if ( $deleted ) {
 			wp_send_json_success(
 				array(
@@ -635,6 +712,51 @@ class Category_Indexer_For_Woo_Admin {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Failed to reset category settings. They may already be at default values.', 'category-indexer-for-woocommerce' ),
+				)
+			);
+		}
+	}
+
+	/**
+	 * AJAX handler for clearing the category cache.
+	 *
+	 * This function handles the AJAX request to clear all category cache.
+	 * It verifies the nonce for security, clears the cache, and returns a JSON response.
+	 */
+	public function ajax_clear_category_cache() {
+		// Check nonce for security
+		check_ajax_referer( 'clear_category_cache_nonce', 'nonce' );
+
+		// Check user capabilities
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You do not have permission to perform this action.', 'category-indexer-for-woocommerce' ),
+				)
+			);
+		}
+
+		// Clear the cache
+		if ( class_exists( 'Category_Indexer_Cache' ) ) {
+			$cleared = Category_Indexer_Cache::clear_cache();
+
+			if ( $cleared ) {
+				wp_send_json_success(
+					array(
+						'message' => __( 'Category cache has been cleared successfully.', 'category-indexer-for-woocommerce' ),
+					)
+				);
+			} else {
+				wp_send_json_error(
+					array(
+						'message' => __( 'Failed to clear cache. It may already be empty.', 'category-indexer-for-woocommerce' ),
+					)
+				);
+			}
+		} else {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Cache class not found.', 'category-indexer-for-woocommerce' ),
 				)
 			);
 		}
