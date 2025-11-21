@@ -42,6 +42,27 @@ class Category_Indexer_Cache {
 	const CACHE_EXPIRATION = DAY_IN_SECONDS;
 
 	/**
+	 * Initializes cache hooks.
+	 *
+	 * This method registers WordPress hooks to automatically clear cache
+	 * when categories or tags are created, updated, or deleted.
+	 */
+	public static function init() {
+		// Clear cache when product categories are modified
+		add_action( 'created_product_cat', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'edited_product_cat', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'delete_product_cat', array( __CLASS__, 'clear_cache' ) );
+
+		// Clear cache when product tags are modified
+		add_action( 'created_product_tag', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'edited_product_tag', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'delete_product_tag', array( __CLASS__, 'clear_cache' ) );
+
+		// Clear cache when plugin options are updated
+		add_action( 'update_option_category_indexer_category_options', array( __CLASS__, 'clear_cache' ), 10, 2 );
+	}
+
+	/**
 	 * Gets all product categories with caching.
 	 *
 	 * @return array Array of WP_Term objects.

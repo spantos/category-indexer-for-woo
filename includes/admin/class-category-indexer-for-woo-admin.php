@@ -32,6 +32,11 @@ class Category_Indexer_For_Woo_Admin {
 			require_once CATEGORY_INDEXER_PLUGIN_DIR . 'includes/admin/class-category-indexer-cache.php';
 		}
 
+		// Initialize cache hooks for automatic cache invalidation
+		if ( class_exists( 'Category_Indexer_Cache' ) ) {
+			Category_Indexer_Cache::init();
+		}
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
