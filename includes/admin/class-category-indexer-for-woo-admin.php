@@ -201,8 +201,8 @@ class Category_Indexer_For_Woo_Admin {
 		// Get categories for current page
 		$paged_categories = array_slice( $categories, $offset, $per_page );
 
-		// Render pagination info and clear cache button
-		echo '<div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">';
+		// Render pagination info
+		echo '<div class="tablenav top" style="margin: 20px 0;">';
 		echo '<div class="tablenav-pages">';
 		echo '<span class="displaying-num">' . sprintf( esc_html__( '%s categories', 'category-indexer-for-woocommerce' ), number_format_i18n( $total_items ) ) . '</span>';
 
@@ -235,9 +235,6 @@ class Category_Indexer_For_Woo_Admin {
 		}
 
 		echo '</div>';
-
-		// Clear cache button
-		echo '<button type="button" id="clear-category-cache" class="button button-secondary">' . esc_html__( 'Clear Cache', 'category-indexer-for-woocommerce' ) . '</button>';
 		echo '</div>';
 
 		// Render categories for current page
@@ -579,9 +576,10 @@ class Category_Indexer_For_Woo_Admin {
 
 		if ( $this->category_section_title === true ) {
 			$this->category_section_title = false;
-			echo '<div style="display: flex; align-items: center; gap: 15px;">';
+			echo '<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">';
 			echo '<h2 style="margin: 0;">' . esc_html__( 'Category Archive Settings', 'category-indexer-for-woocommerce' ) . '</h2>';
 			echo '<button type="button" id="reset-category-settings" class="button button-secondary">' . esc_html__( 'Reset All Categories to Default', 'category-indexer-for-woocommerce' ) . '</button>';
+			echo '<button type="button" id="clear-category-cache" class="button button-secondary" style="background-color: #f0f0f1; border-color: #8c8f94;">' . esc_html__( 'Clear Cache', 'category-indexer-for-woocommerce' ) . '</button>';
 			echo '</div>';
 		}
 		?>
