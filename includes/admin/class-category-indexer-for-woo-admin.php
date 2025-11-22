@@ -43,6 +43,7 @@ class Category_Indexer_For_Woo_Admin {
 		add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
 		add_action( 'wp_ajax_reset_category_settings', array( $this, 'ajax_reset_category_settings' ) );
 		add_action( 'wp_ajax_clear_category_cache', array( $this, 'ajax_clear_category_cache' ) );
+		add_action( 'wp_ajax_update_categories_per_page', array( $this, 'ajax_update_categories_per_page' ) );
 	}
 
 	/**
@@ -198,7 +199,7 @@ class Category_Indexer_For_Woo_Admin {
 		}
 
 		// Pagination settings
-		$per_page     = 20;
+		$per_page     = get_option( 'category_indexer_per_page', 20 );
 		$current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
 		$total_items  = count( $categories );
 		$total_pages  = ceil( $total_items / $per_page );
@@ -294,8 +295,9 @@ class Category_Indexer_For_Woo_Admin {
 			'wc-category-indexer-admin',
 			'categoryIndexerAjax',
 			array(
-				'ajax_url'         => admin_url( 'admin-ajax.php' ),
-				'reset_nonce'      => wp_create_nonce( 'reset_category_settings_nonce' ),
+				'ajax_url'          => admin_url( 'admin-ajax.php' ),
+				'nonce'             => wp_create_nonce( 'category_indexer_nonce' ),
+				'reset_nonce'       => wp_create_nonce( 'reset_category_settings_nonce' ),
 				'clear_cache_nonce' => wp_create_nonce( 'clear_category_cache_nonce' ),
 			)
 		);
@@ -584,6 +586,20 @@ class Category_Indexer_For_Woo_Admin {
 			$this->category_section_title = false;
 			echo '<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">';
 			echo '<h2 style="margin: 0;">' . esc_html__( 'Category Archive Settings', 'category-indexer-for-woocommerce' ) . '</h2>';
+
+			// Per page setting
+			$per_page_setting = get_option( 'category_indexer_per_page', 20 );
+			echo '<div style="display: flex; align-items: center; gap: 5px;">';
+			echo '<label for="categories-per-page" style="margin: 0;">' . esc_html__( 'Categories per page:', 'category-indexer-for-woocommerce' ) . '</label>';
+			echo '<select id="categories-per-page" class="small-text" style="width: auto;">';
+			$per_page_options = array( 10, 20, 30, 50, 100 );
+			foreach ( $per_page_options as $option ) {
+				$selected = selected( $per_page_setting, $option, false );
+				echo '<option value="' . esc_attr( $option ) . '" ' . $selected . '>' . esc_html( $option ) . '</option>';
+			}
+			echo '</select>';
+			echo '</div>';
+
 			echo '<button type="button" id="reset-category-settings" class="button button-secondary">' . esc_html__( 'Reset All Categories to Default', 'category-indexer-for-woocommerce' ) . '</button>';
 			echo '<button type="button" id="clear-category-cache" class="button button-secondary" style="background-color: #f0f0f1; border-color: #8c8f94;">' . esc_html__( 'Clear Cache', 'category-indexer-for-woocommerce' ) . '</button>';
 			echo '</div>';
@@ -786,5 +802,43 @@ class Category_Indexer_For_Woo_Admin {
 				)
 			);
 		}
+	}
+
+	/**
+	 * AJAX handler for updating categories per page setting.
+	 *
+	 * This function handles the AJAX request to update the number of categories
+	 * displayed per page in the admin interface.
+	 */
+	public function ajax_update_categories_per_page() {
+		// Check nonce for security
+		check_ajax_referer( 'category_indexer_nonce', 'nonce' );
+
+		// Check user capabilities
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You do not have permission to perform this action.', 'category-indexer-for-woocommerce' ),
+				)
+			);
+		}
+
+		// Get and validate the per_page value
+		$per_page = isset( $_POST['per_page'] ) ? intval( $_POST['per_page'] ) : 20;
+
+		// Ensure the value is one of the allowed options
+		$allowed_values = array( 10, 20, 30, 50, 100 );
+		if ( ! in_array( $per_page, $allowed_values, true ) ) {
+			$per_page = 20; // Default to 20 if invalid value
+		}
+
+		// Update the option
+		update_option( 'category_indexer_per_page', $per_page );
+
+		wp_send_json_success(
+			array(
+				'message' => __( 'Categories per page setting updated successfully.', 'category-indexer-for-woocommerce' ),
+			)
+		);
 	}
 }

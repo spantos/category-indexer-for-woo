@@ -95,6 +95,43 @@ document.addEventListener('DOMContentLoaded', function() {
          });
       });
    }
+
+   // Categories per page selector
+   const perPageSelector = document.getElementById('categories-per-page');
+   if (perPageSelector) {
+      perPageSelector.addEventListener('change', function(e) {
+         const perPage = e.target.value;
+
+         // Disable selector during request
+         perPageSelector.disabled = true;
+
+         // Make AJAX request
+         const formData = new FormData();
+         formData.append('action', 'update_categories_per_page');
+         formData.append('nonce', categoryIndexerAjax.nonce);
+         formData.append('per_page', perPage);
+
+         fetch(categoryIndexerAjax.ajax_url, {
+            method: 'POST',
+            body: formData
+         })
+         .then(response => response.json())
+         .then(data => {
+            if (data.success) {
+               // Reload the page to show updated pagination
+               window.location.reload();
+            } else {
+               alert(data.data.message || 'An error occurred.');
+               perPageSelector.disabled = false;
+            }
+         })
+         .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating settings.');
+            perPageSelector.disabled = false;
+         });
+      });
+   }
 });
 
 function toggle(radioButton) {
