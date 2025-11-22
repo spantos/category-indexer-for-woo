@@ -461,7 +461,7 @@ class Category_Indexer_For_Woo_Admin {
 	public function render_category_defaults_section() {
 		$options = get_option( 'category_indexer_global_category_defaults' );
 		?>
-		<div class="ci-settings-card">
+		<div class="ci-settings-card ci-full-width">
 			<div class="ci-card-header">
 				<h3><?php esc_html_e( 'Category & Subcategory SEO Defaults', 'category-indexer-for-woocommerce' ); ?></h3>
 				<p class="description" style="margin-top: 8px; font-weight: normal;">
