@@ -137,7 +137,7 @@ class Category_Indexer_For_Woo_Admin {
 		}
 
 		// Get the active tab, default to 'general'
-		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
+		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
 
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'Category Indexer for WooCommerce', 'category-indexer-for-woocommerce' ) . '</h1>';
@@ -202,7 +202,7 @@ class Category_Indexer_For_Woo_Admin {
 
 		// Pagination settings
 		$per_page     = get_option( 'category_indexer_per_page', 20 );
-		$current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
+		$current_page = isset( $_GET['paged'] ) ? max( 1, intval( wp_unslash( $_GET['paged'] ) ) ) : 1;
 		$total_items  = count( $categories );
 		$total_pages  = ceil( $total_items / $per_page );
 		$offset       = ( $current_page - 1 ) * $per_page;
@@ -301,6 +301,18 @@ class Category_Indexer_For_Woo_Admin {
 				'nonce'             => wp_create_nonce( 'category_indexer_nonce' ),
 				'reset_nonce'       => wp_create_nonce( 'reset_category_settings_nonce' ),
 				'clear_cache_nonce' => wp_create_nonce( 'clear_category_cache_nonce' ),
+				'i18n'              => array(
+					'confirmReset'          => esc_html__( 'Are you sure you want to reset all category settings to default? This action cannot be undone.', 'category-indexer-for-woocommerce' ),
+					'confirmClearCache'     => esc_html__( 'Are you sure you want to clear the category cache? The cache will be rebuilt automatically on the next page load.', 'category-indexer-for-woocommerce' ),
+					'resetting'             => esc_html__( 'Resetting...', 'category-indexer-for-woocommerce' ),
+					'clearing'              => esc_html__( 'Clearing...', 'category-indexer-for-woocommerce' ),
+					'resetButton'           => esc_html__( 'Reset All Categories to Default', 'category-indexer-for-woocommerce' ),
+					'clearCacheButton'      => esc_html__( 'Clear Cache', 'category-indexer-for-woocommerce' ),
+					'errorOccurred'         => esc_html__( 'An error occurred.', 'category-indexer-for-woocommerce' ),
+					'errorResetting'        => esc_html__( 'An error occurred while resetting settings.', 'category-indexer-for-woocommerce' ),
+					'errorClearing'         => esc_html__( 'An error occurred while clearing cache.', 'category-indexer-for-woocommerce' ),
+					'errorUpdating'         => esc_html__( 'An error occurred while updating settings.', 'category-indexer-for-woocommerce' ),
+				),
 			)
 		);
 	}
@@ -735,12 +747,17 @@ class Category_Indexer_For_Woo_Admin {
 	 */
 	public function show_admin_notices() {
 		// Only show on our plugin's admin page
-		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'wc-category-indexer' ) {
+		if ( ! isset( $_GET['page'] ) || sanitize_text_field( wp_unslash( $_GET['page'] ) ) !== 'wc-category-indexer' ) {
 			return;
 		}
 
 		// Show cache cleared notice
-		if ( isset( $_GET['cache_cleared'] ) && $_GET['cache_cleared'] === '1' ) {
+		if ( isset( $_GET['cache_cleared'] ) && sanitize_text_field( wp_unslash( $_GET['cache_cleared'] ) ) === '1' ) {
+			// Verify nonce for security
+			if ( ! isset( $_GET['cache_cleared_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['cache_cleared_nonce'] ) ), 'clear_category_cache_nonce' ) ) {
+				return;
+			}
+
 			echo '<div class="notice notice-success is-dismissible">';
 			echo '<p><strong>' . esc_html__( 'Success!', 'category-indexer-for-woocommerce' ) . '</strong> ';
 			echo esc_html__( 'Category cache has been cleared and rebuilt with fresh data.', 'category-indexer-for-woocommerce' );
@@ -856,7 +873,7 @@ class Category_Indexer_For_Woo_Admin {
 		}
 
 		// Get and validate the per_page value
-		$per_page = isset( $_POST['per_page'] ) ? intval( $_POST['per_page'] ) : 20;
+		$per_page = isset( $_POST['per_page'] ) ? intval( wp_unslash( $_POST['per_page'] ) ) : 20;
 
 		// Ensure the value is one of the allowed options
 		$allowed_values = array( 10, 20, 30, 50, 100 );

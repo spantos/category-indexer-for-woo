@@ -12,13 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
          e.preventDefault();
 
          // Confirm with user before resetting
-         if (!confirm('Are you sure you want to reset all category settings to default? This action cannot be undone.')) {
+         if (!confirm(categoryIndexerAjax.i18n.confirmReset)) {
             return;
          }
 
          // Disable button during request
          resetButton.disabled = true;
-         resetButton.textContent = 'Resetting...';
+         resetButton.textContent = categoryIndexerAjax.i18n.resetting;
 
          // Make AJAX request
          const formData = new FormData();
@@ -36,16 +36,16 @@ document.addEventListener('DOMContentLoaded', function() {
                // Reload the page to show updated settings
                window.location.reload();
             } else {
-               alert(data.data.message || 'An error occurred.');
+               alert(data.data.message || categoryIndexerAjax.i18n.errorOccurred);
                resetButton.disabled = false;
-               resetButton.textContent = 'Reset All Categories to Default';
+               resetButton.textContent = categoryIndexerAjax.i18n.resetButton;
             }
          })
          .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred while resetting settings.');
+            alert(categoryIndexerAjax.i18n.errorResetting);
             resetButton.disabled = false;
-            resetButton.textContent = 'Reset All Categories to Default';
+            resetButton.textContent = categoryIndexerAjax.i18n.resetButton;
          });
       });
    }
@@ -57,13 +57,13 @@ document.addEventListener('DOMContentLoaded', function() {
          e.preventDefault();
 
          // Confirm with user before clearing cache
-         if (!confirm('Are you sure you want to clear the category cache? The cache will be rebuilt automatically on the next page load.')) {
+         if (!confirm(categoryIndexerAjax.i18n.confirmClearCache)) {
             return;
          }
 
          // Disable button during request
          clearCacheButton.disabled = true;
-         clearCacheButton.textContent = 'Clearing...';
+         clearCacheButton.textContent = categoryIndexerAjax.i18n.clearing;
 
          // Make AJAX request
          const formData = new FormData();
@@ -80,18 +80,19 @@ document.addEventListener('DOMContentLoaded', function() {
                // Reload with success flag to show notice and rebuild cache
                const url = new URL(window.location.href);
                url.searchParams.set('cache_cleared', '1');
+               url.searchParams.set('cache_cleared_nonce', categoryIndexerAjax.clear_cache_nonce);
                window.location.href = url.toString();
             } else {
-               alert(data.data.message || 'An error occurred.');
+               alert(data.data.message || categoryIndexerAjax.i18n.errorOccurred);
                clearCacheButton.disabled = false;
-               clearCacheButton.textContent = 'Clear Cache';
+               clearCacheButton.textContent = categoryIndexerAjax.i18n.clearCacheButton;
             }
          })
          .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred while clearing cache.');
+            alert(categoryIndexerAjax.i18n.errorClearing);
             clearCacheButton.disabled = false;
-            clearCacheButton.textContent = 'Clear Cache';
+            clearCacheButton.textContent = categoryIndexerAjax.i18n.clearCacheButton;
          });
       });
    }
@@ -123,13 +124,13 @@ document.addEventListener('DOMContentLoaded', function() {
                url.searchParams.delete('paged');
                window.location.href = url.toString();
             } else {
-               alert(data.data.message || 'An error occurred.');
+               alert(data.data.message || categoryIndexerAjax.i18n.errorOccurred);
                perPageSelector.disabled = false;
             }
          })
          .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred while updating settings.');
+            alert(categoryIndexerAjax.i18n.errorUpdating);
             perPageSelector.disabled = false;
          });
       });

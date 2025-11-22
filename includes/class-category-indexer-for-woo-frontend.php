@@ -209,7 +209,7 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 
 				// Override with WooCommerce order by filter settings if they are set
 				$orderby_filter_options = get_option( 'category_indexer_option_orderby' );
-				if ( isset( $_GET['orderby'] ) && ! empty( $_GET['orderby']) ) {
+				if ( isset( $_GET['orderby'] ) && ! empty( sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) ) ) {
 					if ( isset( $orderby_filter_options['noindex'] ) ) {
 						$meta_robots_index = 'noindex';
 					}
