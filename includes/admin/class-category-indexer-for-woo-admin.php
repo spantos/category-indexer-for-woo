@@ -370,7 +370,7 @@ class Category_Indexer_For_Woo_Admin {
 		$options           = get_option( 'category_indexer_option_shop' );
 		$canonical_options = get_option( 'category_indexer_option_shop_canonical' );
 		?>
-		<div class="ci-settings-card">
+		<div class="ci-settings-card ci-full-width">
 			<div class="ci-card-header">
 				<h3><?php esc_html_e( 'Shop Pages Settings', 'category-indexer-for-woocommerce' ); ?></h3>
 			</div>
