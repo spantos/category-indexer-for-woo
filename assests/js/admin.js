@@ -78,8 +78,9 @@ document.addEventListener('DOMContentLoaded', function() {
          .then(data => {
             if (data.success) {
                alert(data.data.message);
-               // Reload the page to rebuild cache
-               window.location.reload();
+               // Don't reload - cache will be rebuilt when needed
+               clearCacheButton.disabled = false;
+               clearCacheButton.textContent = 'Clear Cache';
             } else {
                alert(data.data.message || 'An error occurred.');
                clearCacheButton.disabled = false;
