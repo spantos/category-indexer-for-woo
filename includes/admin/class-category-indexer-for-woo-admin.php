@@ -101,12 +101,13 @@ class Category_Indexer_For_Woo_Admin {
 			'type'              => 'array',
 		);
 
-		// Register settings for the General tab (shop, orderby, url parameters, search)
+		// Register settings for the General tab (shop, orderby, url parameters, search, pagination)
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_shop', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_shop_canonical', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_orderby', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_url_parameters', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_search', $register_setting_args );
+		register_setting( 'category_indexer_general_options', 'category_indexer_option_pagination', $register_setting_args );
 
 		// Register settings for the Categories tab
 		register_setting( 'category_indexer_category_options_group', 'category_indexer_category_options', $register_setting_args );
@@ -174,6 +175,7 @@ class Category_Indexer_For_Woo_Admin {
 		$this->render_orderby_section();
 		$this->render_url_with_parameters();
 		$this->render_search_section();
+		$this->render_pagination_section();
 	}
 
 	/**
@@ -543,6 +545,36 @@ class Category_Indexer_For_Woo_Admin {
 							</label>
 							<p class="description">
 								<?php esc_html_e( 'When enabled, all search result pages will have a canonical tag pointing to the site homepage.', 'category-indexer-for-woocommerce' ); ?>
+							</p>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+
+		<?php
+	}
+
+	/**
+	 * Renders the pagination SEO settings section.
+	 *
+	 * This function is responsible for rendering the HTML for the pagination SEO settings section.
+	 * It displays options for controlling the /page/1/ URL behavior for SEO optimization.
+	 */
+	public function render_pagination_section() {
+		$options = get_option( 'category_indexer_option_pagination' );
+		?>
+			<h2><?php esc_html_e( 'Pagination SEO Settings', 'category-indexer-for-woocommerce' ); ?></h2>
+			<table class="form-table">
+				<tr>
+					<th><?php esc_html_e( 'Remove /page/1/ from URLs', 'category-indexer-for-woocommerce' ); ?></th>
+					<td>
+						<fieldset>
+							<label>
+								<input type="checkbox" name="category_indexer_option_pagination[remove_page_one]" value="yes" <?php checked( 'yes', $options['remove_page_one'] ?? '' ); ?>>
+								<?php esc_html_e( 'Remove /page/1/ from pagination links and URLs', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<p class="description">
+								<?php esc_html_e( 'When enabled, the first page of categories and shop will use clean URLs without /page/1/ suffix. This prevents duplicate content issues and is better for SEO. The URL will be changed in the browser without a 301 redirect.', 'category-indexer-for-woocommerce' ); ?>
 							</p>
 						</fieldset>
 					</td>
