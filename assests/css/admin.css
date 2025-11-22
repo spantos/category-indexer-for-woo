@@ -103,6 +103,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
+    max-width: 400px;
 }
 
 .ci-radio-column {
@@ -115,6 +116,11 @@
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+/* Compact layout for categories */
+.ci-category-settings .ci-two-column-radios {
+    max-width: 350px;
 }
 
 /* Divider between sections */
@@ -175,6 +181,20 @@
 .ci-toolbar-controls label {
     margin: 0;
     font-weight: 600;
+}
+
+/* Pagination alignment fix - move to left */
+.tablenav.top,
+.tablenav-pages {
+    text-align: left !important;
+}
+
+.tablenav-pages {
+    float: none !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 /* Responsive adjustments */
