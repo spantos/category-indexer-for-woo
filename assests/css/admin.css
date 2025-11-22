@@ -130,6 +130,20 @@
     margin: 16px 0;
 }
 
+/* Subsection header within cards */
+.ci-subsection-header {
+    margin-bottom: 16px;
+}
+
+.ci-subsection-header h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d2327;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* Category section specific styles */
 .category-section-title {
     color: #2271b1;

@@ -119,6 +119,54 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			return is_plugin_active( 'wordpress-seo/wp-seo.php' );
 		}
 
+		/**
+		 * Gets the global default settings for categories and subcategories.
+		 *
+		 * This method retrieves global default SEO settings based on whether the term is a category or subcategory.
+		 * These settings are used when no specific category settings are configured in the Categories tab.
+		 *
+		 * @param WP_Term $term The category/subcategory term object.
+		 * @param string  $setting_type The type of setting: 'first_page_index', 'first_page_follow', 'other_pages_index', 'other_pages_follow', 'canonical'.
+		 * @return string The default setting value.
+		 */
+		private function get_global_category_default( $term, $setting_type ) {
+			$global_defaults = get_option( 'category_indexer_global_category_defaults' );
+
+			// Determine if this is a subcategory (has parent) or a category (no parent)
+			$is_subcategory = ( $term->parent !== 0 );
+			$prefix         = $is_subcategory ? 'subcategory_' : 'category_';
+
+			// Map setting types to option keys
+			$setting_map = array(
+				'first_page_index'    => $prefix . 'first_page_index',
+				'first_page_follow'   => $prefix . 'first_page_follow',
+				'other_pages_index'   => $prefix . 'other_pages_index',
+				'other_pages_follow'  => $prefix . 'other_pages_follow',
+				'canonical'           => $prefix . 'other_pages_canonical',
+			);
+
+			$option_key = $setting_map[ $setting_type ] ?? null;
+
+			if ( ! $option_key || ! is_array( $global_defaults ) ) {
+				// Return hard-coded defaults if no global settings exist
+				if ( $setting_type === 'canonical' ) {
+					return 'default';
+				}
+				return ( strpos( $setting_type, 'index' ) !== false ) ? 'index' : 'follow';
+			}
+
+			// Return the global default or fall back to hard-coded default
+			if ( isset( $global_defaults[ $option_key ] ) ) {
+				return $global_defaults[ $option_key ];
+			}
+
+			// Final fallback to hard-coded defaults
+			if ( $setting_type === 'canonical' ) {
+				return 'default';
+			}
+			return ( strpos( $setting_type, 'index' ) !== false ) ? 'index' : 'follow';
+		}
+
 
 		/**
 		 * Sets the meta robots tag based on the current page and plugin settings.
@@ -168,13 +216,21 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 				if ( is_product_category() ) {
 					$term                       = get_queried_object();
 					$category_page_index_option = ( get_option( 'category_indexer_category_options' ) );
-					if ( $category_page_index_option === false ) {
-						return $robots;
+
+					// Use specific category settings if they exist, otherwise use global defaults
+					if ( $category_page_index_option !== false && isset( $category_page_index_option[ $term->term_id ] ) ) {
+						// Category-specific settings exist - use them with global defaults as fallback
+						$first_page_index_option   = $category_page_index_option[ $term->term_id ]['first_page_index'] ?? $this->get_global_category_default( $term, 'first_page_index' );
+						$other_pages_index_option  = $category_page_index_option[ $term->term_id ]['all_other_pages_index'] ?? $this->get_global_category_default( $term, 'other_pages_index' );
+						$first_page_follow_option  = $category_page_index_option[ $term->term_id ]['first_page_follow'] ?? $this->get_global_category_default( $term, 'first_page_follow' );
+						$other_pages_follow_option = $category_page_index_option[ $term->term_id ]['all_other_pages_follow'] ?? $this->get_global_category_default( $term, 'other_pages_follow' );
+					} else {
+						// No category-specific settings - use global defaults
+						$first_page_index_option   = $this->get_global_category_default( $term, 'first_page_index' );
+						$other_pages_index_option  = $this->get_global_category_default( $term, 'other_pages_index' );
+						$first_page_follow_option  = $this->get_global_category_default( $term, 'first_page_follow' );
+						$other_pages_follow_option = $this->get_global_category_default( $term, 'other_pages_follow' );
 					}
-					$first_page_index_option   = $category_page_index_option[ $term->term_id ]['first_page_index'] ?? 'index';
-					$other_pages_index_option  = $category_page_index_option[ $term->term_id ]['all_other_pages_index'] ?? 'index';
-					$first_page_follow_option  = $category_page_index_option[ $term->term_id ]['first_page_follow'] ?? 'follow';
-					$other_pages_follow_option = $category_page_index_option[ $term->term_id ]['all_other_pages_follow'] ?? 'follow';
 				}
 
 				if ( $current_page <= 1 ) {
@@ -284,18 +340,29 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			if ( is_product_category() ) {
 				$current_category           = get_queried_object();
 				$category_canonical_options = get_option( 'category_indexer_category_options' );
-				if ( $category_canonical_options === false ) {
-					return esc_url( $canonical_url );
-				}
+
 				if ( $current_page === 1 ) {
-					// For first page, use default canonical (current URL)
+					// For first page, always use default canonical (current URL)
 					$canonical_url = home_url( add_query_arg( array(), $wp->request ) );
-				} elseif ( $current_page > 1 && ( $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'] ?? null ) === 'default' ) {
-					// For other pages with "default" option, use current URL
-					$canonical_url = home_url( add_query_arg( array(), $wp->request ) );
-				} elseif ( $current_page > 1 && ( $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'] ?? null ) === 'from_first_page' ) {
-					// For other pages with "from_first_page" option, use first page URL
-					$canonical_url = get_term_link( $current_category->term_id, 'product_cat' );
+				} elseif ( $current_page > 1 ) {
+					// For other pages, check category-specific settings first, then global defaults
+					$canonical_option = null;
+
+					if ( $category_canonical_options !== false && isset( $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'] ) ) {
+						// Use category-specific setting
+						$canonical_option = $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'];
+					} else {
+						// Use global default for this category/subcategory
+						$canonical_option = $this->get_global_category_default( $current_category, 'canonical' );
+					}
+
+					if ( $canonical_option === 'default' ) {
+						// Use current URL (each page has its own canonical)
+						$canonical_url = home_url( add_query_arg( array(), $wp->request ) );
+					} elseif ( $canonical_option === 'first_page' || $canonical_option === 'from_first_page' ) {
+						// Use first page URL (all pages point to category base)
+						$canonical_url = get_term_link( $current_category->term_id, 'product_cat' );
+					}
 				}
 			}
 			if ( $this->rank_math_activated ) {

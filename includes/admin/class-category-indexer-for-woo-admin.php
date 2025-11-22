@@ -101,13 +101,14 @@ class Category_Indexer_For_Woo_Admin {
 			'type'              => 'array',
 		);
 
-		// Register settings for the General tab (shop, orderby, url parameters, search, pagination)
+		// Register settings for the General tab (shop, orderby, url parameters, search, pagination, category defaults)
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_shop', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_shop_canonical', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_orderby', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_url_parameters', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_search', $register_setting_args );
 		register_setting( 'category_indexer_general_options', 'category_indexer_option_pagination', $register_setting_args );
+		register_setting( 'category_indexer_general_options', 'category_indexer_global_category_defaults', $register_setting_args );
 
 		// Register settings for the Categories tab
 		register_setting( 'category_indexer_category_options_group', 'category_indexer_category_options', $register_setting_args );
@@ -173,6 +174,7 @@ class Category_Indexer_For_Woo_Admin {
 	public function render_general_tab_content() {
 		echo '<div class="ci-settings-grid">';
 		$this->render_shop_section_content();
+		$this->render_category_defaults_section();
 		$this->render_orderby_section();
 		$this->render_url_with_parameters();
 		$this->render_search_section();
@@ -442,6 +444,185 @@ class Category_Indexer_For_Woo_Admin {
 						<label>
 							<input type="radio" name="category_indexer_option_shop_canonical[pages_after_first]" value="first_page" <?php checked( 'first_page', $canonical_options['pages_after_first'] ?? '' ); ?>>
 							<?php esc_html_e( 'First page as a canonical link', 'category-indexer-for-woocommerce' ); ?>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Renders the global category and subcategory SEO defaults section.
+	 *
+	 * This function is responsible for rendering the HTML for the global SEO settings that apply
+	 * to all categories and subcategories unless overridden by specific category settings.
+	 */
+	public function render_category_defaults_section() {
+		$options = get_option( 'category_indexer_global_category_defaults' );
+		?>
+		<div class="ci-settings-card">
+			<div class="ci-card-header">
+				<h3><?php esc_html_e( 'Category & Subcategory SEO Defaults', 'category-indexer-for-woocommerce' ); ?></h3>
+				<p class="description" style="margin-top: 8px; font-weight: normal;">
+					<?php esc_html_e( 'These settings apply to all categories and subcategories unless overridden by specific category settings in the Categories tab.', 'category-indexer-for-woocommerce' ); ?>
+				</p>
+			</div>
+			<div class="ci-card-body">
+				<!-- Categories Section -->
+				<div class="ci-subsection-header">
+					<h4><?php esc_html_e( 'Product Categories', 'category-indexer-for-woocommerce' ); ?></h4>
+				</div>
+
+				<!-- Category First Page Settings -->
+				<div class="ci-setting-row">
+					<label class="ci-setting-label"><?php esc_html_e( 'First Page', 'category-indexer-for-woocommerce' ); ?></label>
+					<div class="ci-two-column-radios">
+						<div class="ci-radio-column">
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[category_first_page_index]" value="index" <?php checked( 'index', $options['category_first_page_index'] ?? 'index' ); ?>>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[category_first_page_index]" value="noindex" <?php checked( 'noindex', $options['category_first_page_index'] ?? '' ); ?>>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</div>
+						<div class="ci-radio-column">
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[category_first_page_follow]" value="follow" <?php checked( 'follow', $options['category_first_page_follow'] ?? 'follow' ); ?>>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[category_first_page_follow]" value="nofollow" <?php checked( 'nofollow', $options['category_first_page_follow'] ?? '' ); ?>>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="ci-divider"></div>
+
+				<!-- Category Other Pages Settings -->
+				<div class="ci-setting-row">
+					<label class="ci-setting-label"><?php esc_html_e( 'Other Pages in Pagination', 'category-indexer-for-woocommerce' ); ?></label>
+					<div class="ci-two-column-radios">
+						<div class="ci-radio-column">
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[category_other_pages_index]" value="index" <?php checked( 'index', $options['category_other_pages_index'] ?? 'index' ); ?>>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[category_other_pages_index]" value="noindex" <?php checked( 'noindex', $options['category_other_pages_index'] ?? '' ); ?>>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</div>
+						<div class="ci-radio-column">
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[category_other_pages_follow]" value="follow" <?php checked( 'follow', $options['category_other_pages_follow'] ?? 'follow' ); ?>>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[category_other_pages_follow]" value="nofollow" <?php checked( 'nofollow', $options['category_other_pages_follow'] ?? '' ); ?>>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="ci-divider"></div>
+
+				<!-- Category Canonical Tag Settings -->
+				<div class="ci-setting-row">
+					<label class="ci-setting-label"><?php esc_html_e( 'Canonical Tag for Other Pages', 'category-indexer-for-woocommerce' ); ?></label>
+					<div class="ci-radio-group">
+						<label>
+							<input type="radio" name="category_indexer_global_category_defaults[category_other_pages_canonical]" value="default" <?php checked( 'default', $options['category_other_pages_canonical'] ?? 'default' ); ?>>
+							<?php esc_html_e( 'Points to itself (each page has its own canonical)', 'category-indexer-for-woocommerce' ); ?>
+						</label>
+						<label>
+							<input type="radio" name="category_indexer_global_category_defaults[category_other_pages_canonical]" value="first_page" <?php checked( 'first_page', $options['category_other_pages_canonical'] ?? '' ); ?>>
+							<?php esc_html_e( 'Points to first page (all pages use category base URL)', 'category-indexer-for-woocommerce' ); ?>
+						</label>
+					</div>
+				</div>
+
+				<div class="ci-divider" style="margin: 30px 0;"></div>
+
+				<!-- Subcategories Section -->
+				<div class="ci-subsection-header">
+					<h4><?php esc_html_e( 'Product Subcategories', 'category-indexer-for-woocommerce' ); ?></h4>
+				</div>
+
+				<!-- Subcategory First Page Settings -->
+				<div class="ci-setting-row">
+					<label class="ci-setting-label"><?php esc_html_e( 'First Page', 'category-indexer-for-woocommerce' ); ?></label>
+					<div class="ci-two-column-radios">
+						<div class="ci-radio-column">
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[subcategory_first_page_index]" value="index" <?php checked( 'index', $options['subcategory_first_page_index'] ?? 'index' ); ?>>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[subcategory_first_page_index]" value="noindex" <?php checked( 'noindex', $options['subcategory_first_page_index'] ?? '' ); ?>>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</div>
+						<div class="ci-radio-column">
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[subcategory_first_page_follow]" value="follow" <?php checked( 'follow', $options['subcategory_first_page_follow'] ?? 'follow' ); ?>>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[subcategory_first_page_follow]" value="nofollow" <?php checked( 'nofollow', $options['subcategory_first_page_follow'] ?? '' ); ?>>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="ci-divider"></div>
+
+				<!-- Subcategory Other Pages Settings -->
+				<div class="ci-setting-row">
+					<label class="ci-setting-label"><?php esc_html_e( 'Other Pages in Pagination', 'category-indexer-for-woocommerce' ); ?></label>
+					<div class="ci-two-column-radios">
+						<div class="ci-radio-column">
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[subcategory_other_pages_index]" value="index" <?php checked( 'index', $options['subcategory_other_pages_index'] ?? 'index' ); ?>>
+								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[subcategory_other_pages_index]" value="noindex" <?php checked( 'noindex', $options['subcategory_other_pages_index'] ?? '' ); ?>>
+								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</div>
+						<div class="ci-radio-column">
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[subcategory_other_pages_follow]" value="follow" <?php checked( 'follow', $options['subcategory_other_pages_follow'] ?? 'follow' ); ?>>
+								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+							<label>
+								<input type="radio" name="category_indexer_global_category_defaults[subcategory_other_pages_follow]" value="nofollow" <?php checked( 'nofollow', $options['subcategory_other_pages_follow'] ?? '' ); ?>>
+								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="ci-divider"></div>
+
+				<!-- Subcategory Canonical Tag Settings -->
+				<div class="ci-setting-row">
+					<label class="ci-setting-label"><?php esc_html_e( 'Canonical Tag for Other Pages', 'category-indexer-for-woocommerce' ); ?></label>
+					<div class="ci-radio-group">
+						<label>
+							<input type="radio" name="category_indexer_global_category_defaults[subcategory_other_pages_canonical]" value="default" <?php checked( 'default', $options['subcategory_other_pages_canonical'] ?? 'default' ); ?>>
+							<?php esc_html_e( 'Points to itself (each page has its own canonical)', 'category-indexer-for-woocommerce' ); ?>
+						</label>
+						<label>
+							<input type="radio" name="category_indexer_global_category_defaults[subcategory_other_pages_canonical]" value="first_page" <?php checked( 'first_page', $options['subcategory_other_pages_canonical'] ?? '' ); ?>>
+							<?php esc_html_e( 'Points to first page (all pages use subcategory base URL)', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 					</div>
 				</div>
