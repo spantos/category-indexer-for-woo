@@ -118,8 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
          .then(response => response.json())
          .then(data => {
             if (data.success) {
-               // Reload the page to show updated pagination
-               window.location.reload();
+               // Reload the page and reset to page 1 to show updated pagination
+               const url = new URL(window.location.href);
+               url.searchParams.delete('paged');
+               window.location.href = url.toString();
             } else {
                alert(data.data.message || 'An error occurred.');
                perPageSelector.disabled = false;
