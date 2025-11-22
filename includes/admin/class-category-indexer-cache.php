@@ -148,11 +148,26 @@ class Category_Indexer_Cache {
 	 * @return bool True if all caches were cleared successfully.
 	 */
 	public static function clear_cache() {
+		// Delete transients (handles object cache if active)
 		$result1 = delete_transient( self::CACHE_KEY_CATEGORIES );
 		$result2 = delete_transient( self::CACHE_KEY_OPTIONS );
 		$result3 = delete_transient( self::CACHE_KEY_PARENTS );
 
-		return $result1 || $result2 || $result3;
+		// Also delete directly from database to ensure complete cleanup
+		// This is necessary when object cache is active (Redis, Memcached, etc.)
+		// as delete_transient() may only clear from object cache
+		$db_result1 = delete_option( '_transient_' . self::CACHE_KEY_CATEGORIES );
+		$db_result2 = delete_option( '_transient_timeout_' . self::CACHE_KEY_CATEGORIES );
+		$db_result3 = delete_option( '_transient_' . self::CACHE_KEY_OPTIONS );
+		$db_result4 = delete_option( '_transient_timeout_' . self::CACHE_KEY_OPTIONS );
+		$db_result5 = delete_option( '_transient_' . self::CACHE_KEY_PARENTS );
+		$db_result6 = delete_option( '_transient_timeout_' . self::CACHE_KEY_PARENTS );
+
+		// Flush object cache to ensure complete cleanup
+		wp_cache_flush();
+
+		// Return true if any cache was cleared
+		return $result1 || $result2 || $result3 || $db_result1 || $db_result2 || $db_result3 || $db_result4 || $db_result5 || $db_result6;
 	}
 
 	/**
