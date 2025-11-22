@@ -40,6 +40,7 @@ class Category_Indexer_For_Woo_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
 		add_action( 'wp_ajax_reset_category_settings', array( $this, 'ajax_reset_category_settings' ) );
 		add_action( 'wp_ajax_clear_category_cache', array( $this, 'ajax_clear_category_cache' ) );
 	}
@@ -676,6 +677,28 @@ class Category_Indexer_For_Woo_Admin {
 				</tr>
 			</table>
 		<?php
+	}
+
+	/**
+	 * Shows admin notices for cache operations.
+	 *
+	 * This function displays success or error notices after cache operations
+	 * like clearing the cache or resetting settings.
+	 */
+	public function show_admin_notices() {
+		// Only show on our plugin's admin page
+		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'wc-category-indexer' ) {
+			return;
+		}
+
+		// Show cache cleared notice
+		if ( isset( $_GET['cache_cleared'] ) && $_GET['cache_cleared'] === '1' ) {
+			echo '<div class="notice notice-success is-dismissible">';
+			echo '<p><strong>' . esc_html__( 'Success!', 'category-indexer-for-woocommerce' ) . '</strong> ';
+			echo esc_html__( 'Category cache has been cleared and rebuilt with fresh data.', 'category-indexer-for-woocommerce' );
+			echo '</p>';
+			echo '</div>';
+		}
 	}
 
 	/**

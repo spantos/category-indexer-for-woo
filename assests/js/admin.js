@@ -77,10 +77,10 @@ document.addEventListener('DOMContentLoaded', function() {
          .then(response => response.json())
          .then(data => {
             if (data.success) {
-               alert(data.data.message);
-               // Don't reload - cache will be rebuilt when needed
-               clearCacheButton.disabled = false;
-               clearCacheButton.textContent = 'Clear Cache';
+               // Reload with success flag to show notice and rebuild cache
+               const url = new URL(window.location.href);
+               url.searchParams.set('cache_cleared', '1');
+               window.location.href = url.toString();
             } else {
                alert(data.data.message || 'An error occurred.');
                clearCacheButton.disabled = false;
