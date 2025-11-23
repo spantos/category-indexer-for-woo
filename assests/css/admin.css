@@ -177,54 +177,57 @@
 }
 
 /* Override checkbox styling */
-.ci-override-checkbox {
-    background: #f0f6fc;
-    border: 1px solid #c3e4f7;
+.ci-category-settings .ci-override-checkbox {
+    background: #f0f6fc !important;
+    border: 1px solid #c3e4f7 !important;
     border-radius: 4px;
     padding: 12px;
     margin-bottom: 16px;
 }
 
-.ci-override-label {
+.ci-category-settings .ci-override-label {
     display: flex !important;
     align-items: center;
     gap: 8px;
-    margin: 0;
+    margin: 0 !important;
     cursor: pointer;
     font-weight: 500 !important;
 }
 
-.ci-override-label input[type="checkbox"] {
-    margin: 0;
+.ci-category-settings .ci-override-label input[type="checkbox"] {
+    margin: 0 !important;
     cursor: pointer;
 }
 
-.ci-override-text {
+.ci-category-settings .ci-override-text {
     color: #1d2327;
     font-size: 13px;
 }
 
-/* Disabled radio buttons styling */
-.ci-radio-column label.disabled,
-.ci-radio-group label.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+/* Disabled radio buttons styling - stronger specificity */
+.ci-category-settings .ci-radio-column label.disabled,
+.ci-category-settings .ci-radio-group label.disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
 }
 
-.ci-radio-column label.disabled input[type="radio"],
-.ci-radio-group label.disabled input[type="radio"] {
-    cursor: not-allowed;
+.ci-category-settings .ci-radio-column label.disabled input[type="radio"],
+.ci-category-settings .ci-radio-group label.disabled input[type="radio"] {
+    cursor: not-allowed !important;
 }
 
 /* Visual feedback for disabled state */
-input[type="radio"]:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.ci-category-settings input[type="radio"]:disabled,
+.ci-category-settings .ci-two-column-radios input[type="radio"]:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
 }
 
-input[type="radio"]:disabled + label {
-    color: #8c8f94;
-    cursor: not-allowed;
+.ci-category-settings input[type="radio"]:disabled + span,
+.ci-category-settings label:has(input[type="radio"]:disabled) {
+    color: #8c8f94 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
 }
 
 /* Toolbar at the top of categories tab */
