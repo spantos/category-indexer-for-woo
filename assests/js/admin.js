@@ -8,17 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
    // Handle custom settings checkboxes
    const customSettingsCheckboxes = document.querySelectorAll('.ci-use-custom-settings-checkbox');
 
-   if (customSettingsCheckboxes.length > 0) {
-      customSettingsCheckboxes.forEach(function(checkbox) {
-         // Set initial state on page load
-         toggleCategoryRadios(checkbox);
+   customSettingsCheckboxes.forEach(function(checkbox) {
+      // Set initial state on page load
+      toggleCategoryRadios(checkbox);
 
-         // Add event listener for changes
-         checkbox.addEventListener('change', function() {
-            toggleCategoryRadios(checkbox);
-         });
+      // Add event listener for changes
+      checkbox.addEventListener('change', function() {
+         toggleCategoryRadios(checkbox);
       });
-   }
+   });
 
    /**
     * Toggles radio buttons for a category based on custom settings checkbox state
@@ -30,25 +28,17 @@ document.addEventListener('DOMContentLoaded', function() {
       // Find all radio buttons for this category
       const categoryRadios = document.querySelectorAll('input[type="radio"][data-category-id="' + categoryId + '"]');
 
-      if (categoryRadios.length > 0) {
-         categoryRadios.forEach(function(radio) {
-            if (isChecked) {
-               // Enable radio buttons when checkbox is checked
-               radio.disabled = false;
-               radio.removeAttribute('disabled');
-               if (radio.parentElement) {
-                  radio.parentElement.classList.remove('disabled');
-               }
-            } else {
-               // Disable radio buttons when checkbox is unchecked
-               radio.disabled = true;
-               radio.setAttribute('disabled', 'disabled');
-               if (radio.parentElement) {
-                  radio.parentElement.classList.add('disabled');
-               }
-            }
-         });
-      }
+      categoryRadios.forEach(function(radio) {
+         if (isChecked) {
+            // Enable radio buttons when checkbox is checked
+            radio.disabled = false;
+            radio.parentElement.classList.remove('disabled');
+         } else {
+            // Disable radio buttons when checkbox is unchecked
+            radio.disabled = true;
+            radio.parentElement.classList.add('disabled');
+         }
+      });
    }
 
    // Reset category settings button

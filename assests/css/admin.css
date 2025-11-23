@@ -177,57 +177,54 @@
 }
 
 /* Override checkbox styling */
-.ci-category-settings .ci-override-checkbox {
-    background: #f0f6fc !important;
-    border: 1px solid #c3e4f7 !important;
+.ci-override-checkbox {
+    background: #f0f6fc;
+    border: 1px solid #c3e4f7;
     border-radius: 4px;
     padding: 12px;
     margin-bottom: 16px;
 }
 
-.ci-category-settings .ci-override-label {
+.ci-override-label {
     display: flex !important;
     align-items: center;
     gap: 8px;
-    margin: 0 !important;
+    margin: 0;
     cursor: pointer;
     font-weight: 500 !important;
 }
 
-.ci-category-settings .ci-override-label input[type="checkbox"] {
-    margin: 0 !important;
+.ci-override-label input[type="checkbox"] {
+    margin: 0;
     cursor: pointer;
 }
 
-.ci-category-settings .ci-override-text {
+.ci-override-text {
     color: #1d2327;
     font-size: 13px;
 }
 
-/* Disabled radio buttons styling - stronger specificity */
-.ci-category-settings .ci-radio-column label.disabled,
-.ci-category-settings .ci-radio-group label.disabled {
-    opacity: 0.5 !important;
-    cursor: not-allowed !important;
+/* Disabled radio buttons styling */
+.ci-radio-column label.disabled,
+.ci-radio-group label.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.ci-category-settings .ci-radio-column label.disabled input[type="radio"],
-.ci-category-settings .ci-radio-group label.disabled input[type="radio"] {
-    cursor: not-allowed !important;
+.ci-radio-column label.disabled input[type="radio"],
+.ci-radio-group label.disabled input[type="radio"] {
+    cursor: not-allowed;
 }
 
 /* Visual feedback for disabled state */
-.ci-category-settings input[type="radio"]:disabled,
-.ci-category-settings .ci-two-column-radios input[type="radio"]:disabled {
-    opacity: 0.6 !important;
-    cursor: not-allowed !important;
+input[type="radio"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
-.ci-category-settings input[type="radio"]:disabled + span,
-.ci-category-settings label:has(input[type="radio"]:disabled) {
-    color: #8c8f94 !important;
-    cursor: not-allowed !important;
-    opacity: 0.6;
+input[type="radio"]:disabled + label {
+    color: #8c8f94;
+    cursor: not-allowed;
 }
 
 /* Toolbar at the top of categories tab */
