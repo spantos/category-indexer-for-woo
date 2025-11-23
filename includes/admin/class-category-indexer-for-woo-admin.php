@@ -873,27 +873,44 @@ class Category_Indexer_For_Woo_Admin {
 				<?php endif; ?>
 			</h3>
 
+			<!-- Override Global Settings Checkbox -->
+			<div class="ci-setting-row ci-override-checkbox">
+				<label class="ci-override-label">
+					<input
+						type="checkbox"
+						name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][use_custom_settings]"
+						value="yes"
+						class="ci-use-custom-settings-checkbox"
+						data-category-id="<?php echo esc_attr( $category->term_id ); ?>"
+						<?php checked( 'yes', $options[ $category->term_id ]['use_custom_settings'] ?? '' ); ?>
+					>
+					<span class="ci-override-text"><?php esc_html_e( 'Override Global Settings (use custom settings for this category)', 'category-indexer-for-woocommerce' ); ?></span>
+				</label>
+			</div>
+
+			<div class="ci-divider"></div>
+
 			<!-- First Page Settings -->
 			<div class="ci-setting-row">
 				<label class="ci-setting-label"><?php esc_html_e( 'First Page', 'category-indexer-for-woocommerce' ); ?></label>
 				<div class="ci-two-column-radios">
 					<div class="ci-radio-column">
 						<label>
-							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_index]" value="index" <?php checked( 'index', $options[ $category->term_id ]['first_page_index'] ?? 'index' ); ?>>
+							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_index]" value="index" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'index', $options[ $category->term_id ]['first_page_index'] ?? 'index' ); ?>>
 							<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 						<label>
-							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_index]" value="noindex" <?php checked( 'noindex', $options[ $category->term_id ]['first_page_index'] ?? '' ); ?>>
+							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_index]" value="noindex" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'noindex', $options[ $category->term_id ]['first_page_index'] ?? '' ); ?>>
 							<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 					</div>
 					<div class="ci-radio-column">
 						<label>
-							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_follow]" value="follow" <?php checked( 'follow', $options[ $category->term_id ]['first_page_follow'] ?? 'follow' ); ?>>
+							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_follow]" value="follow" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'follow', $options[ $category->term_id ]['first_page_follow'] ?? 'follow' ); ?>>
 							<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 						<label>
-							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_follow]" value="nofollow" <?php checked( 'nofollow', $options[ $category->term_id ]['first_page_follow'] ?? '' ); ?>>
+							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][first_page_follow]" value="nofollow" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'nofollow', $options[ $category->term_id ]['first_page_follow'] ?? '' ); ?>>
 							<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 					</div>
@@ -908,21 +925,21 @@ class Category_Indexer_For_Woo_Admin {
 				<div class="ci-two-column-radios">
 					<div class="ci-radio-column">
 						<label>
-							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_index]" value="index" <?php checked( 'index', $options[ $category->term_id ]['all_other_pages_index'] ?? 'index' ); ?>>
+							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_index]" value="index" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'index', $options[ $category->term_id ]['all_other_pages_index'] ?? 'index' ); ?>>
 							<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 						<label>
-							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_index]" value="noindex" <?php checked( 'noindex', $options[ $category->term_id ]['all_other_pages_index'] ?? '' ); ?>>
+							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_index]" value="noindex" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'noindex', $options[ $category->term_id ]['all_other_pages_index'] ?? '' ); ?>>
 							<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 					</div>
 					<div class="ci-radio-column">
 						<label>
-							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_follow]" value="follow" <?php checked( 'follow', $options[ $category->term_id ]['all_other_pages_follow'] ?? 'follow' ); ?>>
+							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_follow]" value="follow" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'follow', $options[ $category->term_id ]['all_other_pages_follow'] ?? 'follow' ); ?>>
 							<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 						<label>
-							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_follow]" value="nofollow" <?php checked( 'nofollow', $options[ $category->term_id ]['all_other_pages_follow'] ?? '' ); ?>>
+							<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][all_other_pages_follow]" value="nofollow" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'nofollow', $options[ $category->term_id ]['all_other_pages_follow'] ?? '' ); ?>>
 							<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
 						</label>
 					</div>
@@ -936,11 +953,11 @@ class Category_Indexer_For_Woo_Admin {
 				<label class="ci-setting-label"><?php esc_html_e( 'Canonical Tag for Pages After First', 'category-indexer-for-woocommerce' ); ?></label>
 				<div class="ci-radio-group">
 					<label>
-						<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="default" <?php checked( 'default', $options[ $category->term_id ]['canonical_all_other_pages'] ?? 'default' ); ?>>
+						<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="default" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'default', $options[ $category->term_id ]['canonical_all_other_pages'] ?? 'default' ); ?>>
 						<?php esc_html_e( 'Default (No Change)', 'category-indexer-for-woocommerce' ); ?>
 					</label>
 					<label>
-						<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="from_first_page" <?php checked( 'from_first_page', $options[ $category->term_id ]['canonical_all_other_pages'] ?? '' ); ?>>
+						<input type="radio" name="category_indexer_category_options[<?php echo esc_attr( $category->term_id ); ?>][canonical_all_other_pages]" value="from_first_page" data-category-id="<?php echo esc_attr( $category->term_id ); ?>" <?php checked( 'from_first_page', $options[ $category->term_id ]['canonical_all_other_pages'] ?? '' ); ?>>
 						<?php esc_html_e( 'First page as a canonical link', 'category-indexer-for-woocommerce' ); ?>
 					</label>
 				</div>

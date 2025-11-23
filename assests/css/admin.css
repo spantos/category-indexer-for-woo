@@ -176,6 +176,57 @@
     margin-bottom: 16px;
 }
 
+/* Override checkbox styling */
+.ci-override-checkbox {
+    background: #f0f6fc;
+    border: 1px solid #c3e4f7;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.ci-override-label {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    cursor: pointer;
+    font-weight: 500 !important;
+}
+
+.ci-override-label input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.ci-override-text {
+    color: #1d2327;
+    font-size: 13px;
+}
+
+/* Disabled radio buttons styling */
+.ci-radio-column label.disabled,
+.ci-radio-group label.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ci-radio-column label.disabled input[type="radio"],
+.ci-radio-group label.disabled input[type="radio"] {
+    cursor: not-allowed;
+}
+
+/* Visual feedback for disabled state */
+input[type="radio"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+input[type="radio"]:disabled + label {
+    color: #8c8f94;
+    cursor: not-allowed;
+}
+
 /* Toolbar at the top of categories tab */
 .ci-toolbar {
     display: flex;

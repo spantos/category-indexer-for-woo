@@ -217,15 +217,21 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 					$term                       = get_queried_object();
 					$category_page_index_option = ( get_option( 'category_indexer_category_options' ) );
 
-					// Use specific category settings if they exist, otherwise use global defaults
-					if ( $category_page_index_option !== false && isset( $category_page_index_option[ $term->term_id ] ) ) {
-						// Category-specific settings exist - use them with global defaults as fallback
+					// Check if custom settings are enabled for this category
+					$use_custom_settings = false;
+					if ( $category_page_index_option !== false && isset( $category_page_index_option[ $term->term_id ]['use_custom_settings'] ) ) {
+						$use_custom_settings = ( $category_page_index_option[ $term->term_id ]['use_custom_settings'] === 'yes' );
+					}
+
+					// Use specific category settings only if custom settings are enabled
+					if ( $use_custom_settings && isset( $category_page_index_option[ $term->term_id ] ) ) {
+						// Category-specific settings are enabled - use them with global defaults as fallback
 						$first_page_index_option   = $category_page_index_option[ $term->term_id ]['first_page_index'] ?? $this->get_global_category_default( $term, 'first_page_index' );
 						$other_pages_index_option  = $category_page_index_option[ $term->term_id ]['all_other_pages_index'] ?? $this->get_global_category_default( $term, 'other_pages_index' );
 						$first_page_follow_option  = $category_page_index_option[ $term->term_id ]['first_page_follow'] ?? $this->get_global_category_default( $term, 'first_page_follow' );
 						$other_pages_follow_option = $category_page_index_option[ $term->term_id ]['all_other_pages_follow'] ?? $this->get_global_category_default( $term, 'other_pages_follow' );
 					} else {
-						// No category-specific settings - use global defaults
+						// Custom settings not enabled - use global defaults
 						$first_page_index_option   = $this->get_global_category_default( $term, 'first_page_index' );
 						$other_pages_index_option  = $this->get_global_category_default( $term, 'other_pages_index' );
 						$first_page_follow_option  = $this->get_global_category_default( $term, 'first_page_follow' );
@@ -345,10 +351,16 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 					// For first page, always use default canonical (current URL)
 					$canonical_url = home_url( add_query_arg( array(), $wp->request ) );
 				} elseif ( $current_page > 1 ) {
-					// For other pages, check category-specific settings first, then global defaults
+					// Check if custom settings are enabled for this category
+					$use_custom_settings = false;
+					if ( $category_canonical_options !== false && isset( $category_canonical_options[ $current_category->term_id ]['use_custom_settings'] ) ) {
+						$use_custom_settings = ( $category_canonical_options[ $current_category->term_id ]['use_custom_settings'] === 'yes' );
+					}
+
+					// For other pages, check category-specific settings only if custom settings are enabled
 					$canonical_option = null;
 
-					if ( $category_canonical_options !== false && isset( $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'] ) ) {
+					if ( $use_custom_settings && isset( $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'] ) ) {
 						// Use category-specific setting
 						$canonical_option = $category_canonical_options[ $current_category->term_id ]['canonical_all_other_pages'];
 					} else {
