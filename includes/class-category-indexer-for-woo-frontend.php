@@ -59,7 +59,7 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			$pagination_options = get_option( 'category_indexer_option_pagination' );
 			if ( isset( $pagination_options['remove_page_one'] ) && $pagination_options['remove_page_one'] === 'yes' ) {
 				add_filter( 'paginate_links', array( $this, 'remove_page_one_from_links' ) );
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_pagination_fix_script' ) );
+				//add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_pagination_fix_script' ) );
 			}
 		}
 
