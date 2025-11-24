@@ -418,6 +418,12 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			// Clean up trailing question marks or ampersands
 			$link = rtrim( $link, '?&' );
 
+			// If link is empty after cleanup, return current page URL without query string
+			if ( empty( $link ) || $link === '?' ) {
+				global $wp;
+				$link = home_url( $wp->request );
+			}
+
 			return $link;
 		}
 
