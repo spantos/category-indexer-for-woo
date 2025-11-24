@@ -293,8 +293,8 @@ class Category_Indexer_For_Woo_Admin {
 	 * additional functionality for the Category Indexer for WooCommerce plugin's admin page.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'wc-category-indexer-admin', CATEGORY_INDEXER_PLUGIN_URL . 'assests/js/admin.js', array( 'jquery' ), false, true );
-		wp_enqueue_style( 'wc-category-indexer-admin-css', CATEGORY_INDEXER_PLUGIN_URL . 'assests/css/admin.css', array(), false, 'all' );
+		wp_enqueue_script( 'wc-category-indexer-admin', CATEGORY_INDEXER_PLUGIN_URL . 'assests/js/admin.js', array( 'jquery' ), CATEGORY_INDEXER_VERSION, true );
+		wp_enqueue_style( 'wc-category-indexer-admin-css', CATEGORY_INDEXER_PLUGIN_URL . 'assests/css/admin.css', array(), CATEGORY_INDEXER_VERSION, 'all' );
 
 		// Localize script for AJAX
 		wp_localize_script(
@@ -330,6 +330,7 @@ class Category_Indexer_For_Woo_Admin {
 	 */
 	
 	 public static function plugin_activation_check() {
+		/*
 		if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
 			wp_die(
@@ -338,6 +339,7 @@ class Category_Indexer_For_Woo_Admin {
 				array( 'back_link' => true )
 			);
 		}
+		*/
 
 		if ( ! is_plugin_active( 'seo-by-rank-math/rank-math.php' ) && ! is_plugin_active( 'wordpress-seo/wp-seo.php' ) ) {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
