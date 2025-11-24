@@ -59,6 +59,9 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			$pagination_options = get_option( 'category_indexer_option_pagination' );
 			if ( isset( $pagination_options['remove_page_one'] ) && $pagination_options['remove_page_one'] === 'yes' ) {
 				add_filter( 'paginate_links', array( $this, 'remove_page_one_from_links' ) );
+				add_filter( 'get_previous_posts_page_link', array( $this, 'remove_page_one_from_links' ) );
+				add_filter( 'get_next_posts_page_link', array( $this, 'remove_page_one_from_links' ) );
+				add_filter( 'render_block', array( $this, 'clean_block_pagination_links' ), 10, 2 );
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_pagination_fix_script' ) );
 			}
 		}
@@ -425,6 +428,37 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			}
 
 			return $link;
+		}
+
+		/**
+		 * Cleans pagination links in block output HTML.
+		 *
+		 * This function processes rendered blocks and cleans any pagination links
+		 * in the HTML output by removing query-X-page=1 and cst parameters.
+		 * This is specifically useful for Product Collection blocks and pagination blocks.
+		 *
+		 * @param string $block_content The block content.
+		 * @param array  $block The block data.
+		 * @return string The filtered block content.
+		 */
+		public function clean_block_pagination_links( $block_content, $block ) {
+			// Only process pagination-related blocks
+			if ( empty( $block_content ) || ! is_string( $block_content ) ) {
+				return $block_content;
+			}
+
+			// Clean href attributes containing query-X-page=1 and cst parameters
+			$block_content = preg_replace_callback(
+				'/href=["\']([^"\']*)["\']/',
+				function( $matches ) {
+					$url = $matches[1];
+					$url = $this->remove_page_one_from_links( $url );
+					return 'href="' . esc_url( $url ) . '"';
+				},
+				$block_content
+			);
+
+			return $block_content;
 		}
 
 		/**
