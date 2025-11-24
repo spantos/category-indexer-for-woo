@@ -1,10 +1,8 @@
 === Category Indexer for WooCommerce ===
 Contributors: tihi
-Tags: seo, woocommerce, meta robots, canonical, noindex, nofollow, link juice, crawl budget, duplicate content, category seo
-Requires at least: 5.4
+Tags: seo, woocommerce, meta robots, canonical, link juice
 Tested up to: 6.8
-Requires PHP: 7.0
-Stable tag: 1.0.1
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,6 +10,16 @@ Control meta robots tags, canonical URLs, and link juice flow on WooCommerce sho
 
 == Description ==
 Category Indexer for WooCommerce is a powerful SEO tool designed to help WooCommerce store owners efficiently manage the indexing of their category and shop pages. By selectively controlling which pages are indexed and followed by search engines, this plugin can help save on Google's crawling budget, particularly for large WooCommerce stores. This means better resource allocation and potentially improved SEO performance.
+This plugin gives you complete control over three critical SEO elements that directly impact your WooCommerce store's search engine performance: **meta robots tags**, **canonical URLs**, and **link juice distribution**.
+
+**Control Meta Robots Tags with Precision**
+Unlike basic SEO plugins that offer only site-wide settings, Category Indexer for WooCommerce allows you to configure meta robots tags (index, noindex, follow, nofollow) at multiple levels. You can set global defaults for all shop and category pages, then override these settings for individual categories that need special treatment. This granular control means you can index your high-value category pages while preventing search engines from wasting resources on low-value pagination pages - all through an intuitive interface that requires no coding knowledge.
+
+**Automatic Canonical Tag Implementation**
+Duplicate content is one of the biggest SEO challenges for WooCommerce stores. When you have category pages with pagination, sorting options, or filtering parameters, search engines can see multiple similar pages competing for the same rankings. This plugin automatically adds canonical tags to all your category and shop pages, ensuring that pagination pages always point back to the primary page as the authoritative version. This consolidates your SEO authority and prevents Google from penalizing your site for duplicate content.
+
+**Optimize Link Juice Flow Through Your Store**
+Every link on your website passes SEO value (link juice) to the pages it points to. Without proper management, this valuable link equity gets diluted across hundreds of pagination pages that don't need it. By strategically applying nofollow meta robots tags to pagination pages, you keep link juice concentrated on your most important pages - your main category pages and product pages. This means better rankings for the pages that actually drive sales, while still allowing customers to navigate your entire catalog.
 
 **Understanding Key SEO Concepts**
 
