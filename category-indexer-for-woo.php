@@ -5,8 +5,11 @@
  * @package PluginPackage
  * Plugin URI:
  * Description: Display and manage meta robots index and canonical options for WooCommerce categories and subcategories.
- * Version: 1.0.1
+ * Requires at least: 6.5
+ * Requires PHP: 7.0
+ * Version: 2.0.0
  * Author: Slobodan Pantovic
+ * Requires Plugins: woocommerce
  * Author URI:
  * Text Domain: category-indexer-for-woocommerce
  * Domain Path: /languages
@@ -25,31 +28,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * These constants are used throughout the plugin to provide version information,
  * file paths, and the text domain for internationalization.
  */
-defined( 'CATEGORY_INDEXER_VERSION' ) || define( 'CATEGORY_INDEXER_VERSION', '1.0.1' );
+defined( 'CATEGORY_INDEXER_VERSION' ) || define( 'CATEGORY_INDEXER_VERSION', '2.0.0' );
 defined( 'CATEGORY_INDEXER_PLUGIN_FILE' ) || define( 'CATEGORY_INDEXER_PLUGIN_FILE', basename( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_PLUGIN_DIR' ) || define( 'CATEGORY_INDEXER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_PLUGIN_URL' ) || define( 'CATEGORY_INDEXER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 defined( 'CATEGORY_INDEXER_TEXT_DOMAIN' ) || define( 'CATEGORY_INDEXER_TEXT_DOMAIN', 'category-indexer-for-woocommerce' );
-
-
-if ( ! function_exists( 'category_indexer_load_textdomain' ) ) {
-
- /**
-  * Loads the translated strings for the Category Indexer for WooCommerce plugin.
-  *
-  * This function is responsible for loading the translation files for the plugin,
-  * allowing the plugin to be localized and translated into different languages.
-  *
-  * @since 1.0.0
-  * @return void
-  */
- function category_indexer_load_textdomain() {
-    load_plugin_textdomain( CATEGORY_INDEXER_TEXT_DOMAIN, false, basename( __DIR__ ) . '/languages' );
- }
-}
- 
-add_action( 'plugins_loaded', 'category_indexer_load_textdomain' );
-
 
 /**
  * Includes the Category_Indexer_For_Woo_Admin class and registers the plugin activation hook.
