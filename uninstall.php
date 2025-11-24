@@ -4,7 +4,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Plugin options to delete
-$options = [
+$category_indexer_options = [
 	'category_indexer_option_shop',
 	'category_indexer_option_shop_canonical',
 	'category_indexer_option_orderby',
@@ -16,20 +16,20 @@ $options = [
 	'category_indexer_category_options'
 ];
 
-foreach ( $options as $option ) {
-	delete_option( $option );
+foreach ( $category_indexer_options as $$category_indexer_option ) {
+	delete_option( $$category_indexer_option );
 }
 
 // Delete transients used for caching
-$transients = [
+$category_indexer_transients = [
 	'category_indexer_categories',
 	'category_indexer_options',
 	'category_indexer_parents'
 ];
 
-foreach ( $transients as $transient ) {
-	delete_transient( $transient );
+foreach ( $category_indexer_transients as $category_indexer_transient ) {
+	delete_transient( $category_indexer_transient );
 	// Also delete directly from database to ensure complete cleanup
-	delete_option( '_transient_' . $transient );
-	delete_option( '_transient_timeout_' . $transient );
+	delete_option( '_transient_' . $category_indexer_transient );
+	delete_option( '_transient_timeout_' . $category_indexer_transient );
 }
