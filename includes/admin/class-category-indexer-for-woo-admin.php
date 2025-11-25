@@ -217,6 +217,7 @@ class Category_Indexer_For_Woo_Admin {
 		// Render pagination info
 		echo '<div class="tablenav top" style="margin: 20px 0;">';
 		echo '<div class="tablenav-pages">';
+		/* translators: %s: number of categories */
 		echo '<span class="displaying-num">' . sprintf( esc_html__( '%s categories', 'category-indexer-for-woocommerce' ), number_format_i18n( $total_items ) ) . '</span>';
 
 		if ( $total_pages > 1 ) {
@@ -232,6 +233,7 @@ class Category_Indexer_For_Woo_Admin {
 			}
 
 			echo '<span class="paging-input">';
+			/* translators: 1: current page number, 2: total number of pages */
 			echo '<span class="tablenav-paging-text">' . sprintf( esc_html__( '%1$s of %2$s', 'category-indexer-for-woocommerce' ), number_format_i18n( $current_page ), number_format_i18n( $total_pages ) ) . '</span>';
 			echo '</span> ';
 
@@ -258,6 +260,7 @@ class Category_Indexer_For_Woo_Admin {
 		// Bottom pagination
 		if ( $total_pages > 1 ) {
 			echo '<div class="tablenav-pages" style="margin-top: 20px;">';
+			/* translators: %s: number of categories */
 			echo '<span class="displaying-num">' . sprintf( esc_html__( '%s categories', 'category-indexer-for-woocommerce' ), number_format_i18n( $total_items ) ) . '</span>';
 			echo '<span class="pagination-links">';
 
@@ -270,6 +273,7 @@ class Category_Indexer_For_Woo_Admin {
 			}
 
 			echo '<span class="paging-input">';
+			/* translators: 1: current page number, 2: total number of pages */
 			echo '<span class="tablenav-paging-text">' . sprintf( esc_html__( '%1$s of %2$s', 'category-indexer-for-woocommerce' ), number_format_i18n( $current_page ), number_format_i18n( $total_pages ) ) . '</span>';
 			echo '</span> ';
 
