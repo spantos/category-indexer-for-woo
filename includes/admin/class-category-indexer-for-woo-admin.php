@@ -138,15 +138,38 @@ class Category_Indexer_For_Woo_Admin {
 		}
 
 		// Get the active tab, default to 'general'
-		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
+		$active_tab = 'general'; // Default value
+		if ( isset( $_GET['tab'] ) ) {
+			// Verify nonce for tab navigation
+			if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'category_indexer_tab_' . sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) ) {
+				wp_die( esc_html__( 'Security verification failed. Please try again.', 'category-indexer-for-woocommerce' ) );
+			}
+			$active_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
+		}
 
 		echo '<div class="wrap">';
 		echo '<h1>' . esc_html__( 'Category Indexer for WooCommerce', 'category-indexer-for-woocommerce' ) . '</h1>';
 
 		// Render tabs
 		echo '<h2 class="nav-tab-wrapper">';
-		echo '<a href="?page=wc-category-indexer&tab=general" class="nav-tab ' . ( $active_tab === 'general' ? 'nav-tab-active' : '' ) . '">' . esc_html__( 'General', 'category-indexer-for-woocommerce' ) . '</a>';
-		echo '<a href="?page=wc-category-indexer&tab=categories" class="nav-tab ' . ( $active_tab === 'categories' ? 'nav-tab-active' : '' ) . '">' . esc_html__( 'Categories', 'category-indexer-for-woocommerce' ) . '</a>';
+		$general_url    = add_query_arg(
+			array(
+				'page' => 'wc-category-indexer',
+				'tab'  => 'general',
+			),
+			admin_url( 'admin.php' )
+		);
+		$general_url    = wp_nonce_url( $general_url, 'category_indexer_tab_general' );
+		$categories_url = add_query_arg(
+			array(
+				'page' => 'wc-category-indexer',
+				'tab'  => 'categories',
+			),
+			admin_url( 'admin.php' )
+		);
+		$categories_url = wp_nonce_url( $categories_url, 'category_indexer_tab_categories' );
+		echo '<a href="' . esc_url( $general_url ) . '" class="nav-tab ' . ( $active_tab === 'general' ? 'nav-tab-active' : '' ) . '">' . esc_html__( 'General', 'category-indexer-for-woocommerce' ) . '</a>';
+		echo '<a href="' . esc_url( $categories_url ) . '" class="nav-tab ' . ( $active_tab === 'categories' ? 'nav-tab-active' : '' ) . '">' . esc_html__( 'Categories', 'category-indexer-for-woocommerce' ) . '</a>';
 		echo '</h2>';
 
 		// Start form with the correct option group for the active tab
@@ -206,7 +229,14 @@ class Category_Indexer_For_Woo_Admin {
 
 		// Pagination settings
 		$per_page     = get_option( 'category_indexer_per_page', 20 );
-		$current_page = isset( $_GET['paged'] ) ? max( 1, intval( wp_unslash( $_GET['paged'] ) ) ) : 1;
+		$current_page = 1; // Default value
+		if ( isset( $_GET['paged'] ) ) {
+			// Verify nonce for pagination
+			if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'category_indexer_pagination' ) ) {
+				wp_die( esc_html__( 'Security verification failed. Please try again.', 'category-indexer-for-woocommerce' ) );
+			}
+			$current_page = max( 1, intval( wp_unslash( $_GET['paged'] ) ) );
+		}
 		$total_items  = count( $categories );
 		$total_pages  = ceil( $total_items / $per_page );
 		$offset       = ( $current_page - 1 ) * $per_page;
@@ -225,8 +255,10 @@ class Category_Indexer_For_Woo_Admin {
 
 			// First page
 			if ( $current_page > 1 ) {
-				echo '<a class="first-page button" href="' . esc_url( add_query_arg( 'paged', 1 ) ) . '">&laquo;</a> ';
-				echo '<a class="prev-page button" href="' . esc_url( add_query_arg( 'paged', $current_page - 1 ) ) . '">&lsaquo;</a> ';
+				$first_page_url = wp_nonce_url( add_query_arg( 'paged', 1 ), 'category_indexer_pagination' );
+				$prev_page_url  = wp_nonce_url( add_query_arg( 'paged', $current_page - 1 ), 'category_indexer_pagination' );
+				echo '<a class="first-page button" href="' . esc_url( $first_page_url ) . '">&laquo;</a> ';
+				echo '<a class="prev-page button" href="' . esc_url( $prev_page_url ) . '">&lsaquo;</a> ';
 			} else {
 				echo '<span class="tablenav-pages-navspan button disabled">&laquo;</span> ';
 				echo '<span class="tablenav-pages-navspan button disabled">&lsaquo;</span> ';
@@ -239,8 +271,10 @@ class Category_Indexer_For_Woo_Admin {
 
 			// Next and last page
 			if ( $current_page < $total_pages ) {
-				echo '<a class="next-page button" href="' . esc_url( add_query_arg( 'paged', $current_page + 1 ) ) . '">&rsaquo;</a> ';
-				echo '<a class="last-page button" href="' . esc_url( add_query_arg( 'paged', $total_pages ) ) . '">&raquo;</a>';
+				$next_page_url = wp_nonce_url( add_query_arg( 'paged', $current_page + 1 ), 'category_indexer_pagination' );
+				$last_page_url = wp_nonce_url( add_query_arg( 'paged', $total_pages ), 'category_indexer_pagination' );
+				echo '<a class="next-page button" href="' . esc_url( $next_page_url ) . '">&rsaquo;</a> ';
+				echo '<a class="last-page button" href="' . esc_url( $last_page_url ) . '">&raquo;</a>';
 			} else {
 				echo '<span class="tablenav-pages-navspan button disabled">&rsaquo;</span> ';
 				echo '<span class="tablenav-pages-navspan button disabled">&raquo;</span>';
@@ -265,8 +299,10 @@ class Category_Indexer_For_Woo_Admin {
 			echo '<span class="pagination-links">';
 
 			if ( $current_page > 1 ) {
-				echo '<a class="first-page button" href="' . esc_url( add_query_arg( 'paged', 1 ) ) . '">&laquo;</a> ';
-				echo '<a class="prev-page button" href="' . esc_url( add_query_arg( 'paged', $current_page - 1 ) ) . '">&lsaquo;</a> ';
+				$first_page_url = wp_nonce_url( add_query_arg( 'paged', 1 ), 'category_indexer_pagination' );
+				$prev_page_url  = wp_nonce_url( add_query_arg( 'paged', $current_page - 1 ), 'category_indexer_pagination' );
+				echo '<a class="first-page button" href="' . esc_url( $first_page_url ) . '">&laquo;</a> ';
+				echo '<a class="prev-page button" href="' . esc_url( $prev_page_url ) . '">&lsaquo;</a> ';
 			} else {
 				echo '<span class="tablenav-pages-navspan button disabled">&laquo;</span> ';
 				echo '<span class="tablenav-pages-navspan button disabled">&lsaquo;</span> ';
@@ -278,8 +314,10 @@ class Category_Indexer_For_Woo_Admin {
 			echo '</span> ';
 
 			if ( $current_page < $total_pages ) {
-				echo '<a class="next-page button" href="' . esc_url( add_query_arg( 'paged', $current_page + 1 ) ) . '">&rsaquo;</a> ';
-				echo '<a class="last-page button" href="' . esc_url( add_query_arg( 'paged', $total_pages ) ) . '">&raquo;</a>';
+				$next_page_url = wp_nonce_url( add_query_arg( 'paged', $current_page + 1 ), 'category_indexer_pagination' );
+				$last_page_url = wp_nonce_url( add_query_arg( 'paged', $total_pages ), 'category_indexer_pagination' );
+				echo '<a class="next-page button" href="' . esc_url( $next_page_url ) . '">&rsaquo;</a> ';
+				echo '<a class="last-page button" href="' . esc_url( $last_page_url ) . '">&raquo;</a>';
 			} else {
 				echo '<span class="tablenav-pages-navspan button disabled">&rsaquo;</span> ';
 				echo '<span class="tablenav-pages-navspan button disabled">&raquo;</span>';
