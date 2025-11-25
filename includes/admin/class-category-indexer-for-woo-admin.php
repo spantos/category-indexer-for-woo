@@ -231,10 +231,6 @@ class Category_Indexer_For_Woo_Admin {
 		$per_page     = get_option( 'category_indexer_per_page', 20 );
 		$current_page = 1; // Default value
 		if ( isset( $_GET['paged'] ) ) {
-			// Verify nonce for pagination
-			if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'category_indexer_pagination' ) ) {
-				wp_die( esc_html__( 'Security verification failed. Please try again.', 'category-indexer-for-woocommerce' ) );
-			}
 			$current_page = max( 1, intval( wp_unslash( $_GET['paged'] ) ) );
 		}
 		$total_items  = count( $categories );
@@ -255,8 +251,24 @@ class Category_Indexer_For_Woo_Admin {
 
 			// First page
 			if ( $current_page > 1 ) {
-				$first_page_url = wp_nonce_url( add_query_arg( 'paged', 1 ), 'category_indexer_pagination' );
-				$prev_page_url  = wp_nonce_url( add_query_arg( 'paged', $current_page - 1 ), 'category_indexer_pagination' );
+				$first_page_url = add_query_arg(
+					array(
+						'page'  => 'wc-category-indexer',
+						'tab'   => 'categories',
+						'paged' => 1,
+					),
+					admin_url( 'admin.php' )
+				);
+				$first_page_url = wp_nonce_url( $first_page_url, 'category_indexer_tab_categories' );
+				$prev_page_url  = add_query_arg(
+					array(
+						'page'  => 'wc-category-indexer',
+						'tab'   => 'categories',
+						'paged' => $current_page - 1,
+					),
+					admin_url( 'admin.php' )
+				);
+				$prev_page_url  = wp_nonce_url( $prev_page_url, 'category_indexer_tab_categories' );
 				echo '<a class="first-page button" href="' . esc_url( $first_page_url ) . '">&laquo;</a> ';
 				echo '<a class="prev-page button" href="' . esc_url( $prev_page_url ) . '">&lsaquo;</a> ';
 			} else {
@@ -271,8 +283,24 @@ class Category_Indexer_For_Woo_Admin {
 
 			// Next and last page
 			if ( $current_page < $total_pages ) {
-				$next_page_url = wp_nonce_url( add_query_arg( 'paged', $current_page + 1 ), 'category_indexer_pagination' );
-				$last_page_url = wp_nonce_url( add_query_arg( 'paged', $total_pages ), 'category_indexer_pagination' );
+				$next_page_url = add_query_arg(
+					array(
+						'page'  => 'wc-category-indexer',
+						'tab'   => 'categories',
+						'paged' => $current_page + 1,
+					),
+					admin_url( 'admin.php' )
+				);
+				$next_page_url = wp_nonce_url( $next_page_url, 'category_indexer_tab_categories' );
+				$last_page_url = add_query_arg(
+					array(
+						'page'  => 'wc-category-indexer',
+						'tab'   => 'categories',
+						'paged' => $total_pages,
+					),
+					admin_url( 'admin.php' )
+				);
+				$last_page_url = wp_nonce_url( $last_page_url, 'category_indexer_tab_categories' );
 				echo '<a class="next-page button" href="' . esc_url( $next_page_url ) . '">&rsaquo;</a> ';
 				echo '<a class="last-page button" href="' . esc_url( $last_page_url ) . '">&raquo;</a>';
 			} else {
@@ -299,8 +327,24 @@ class Category_Indexer_For_Woo_Admin {
 			echo '<span class="pagination-links">';
 
 			if ( $current_page > 1 ) {
-				$first_page_url = wp_nonce_url( add_query_arg( 'paged', 1 ), 'category_indexer_pagination' );
-				$prev_page_url  = wp_nonce_url( add_query_arg( 'paged', $current_page - 1 ), 'category_indexer_pagination' );
+				$first_page_url = add_query_arg(
+					array(
+						'page'  => 'wc-category-indexer',
+						'tab'   => 'categories',
+						'paged' => 1,
+					),
+					admin_url( 'admin.php' )
+				);
+				$first_page_url = wp_nonce_url( $first_page_url, 'category_indexer_tab_categories' );
+				$prev_page_url  = add_query_arg(
+					array(
+						'page'  => 'wc-category-indexer',
+						'tab'   => 'categories',
+						'paged' => $current_page - 1,
+					),
+					admin_url( 'admin.php' )
+				);
+				$prev_page_url  = wp_nonce_url( $prev_page_url, 'category_indexer_tab_categories' );
 				echo '<a class="first-page button" href="' . esc_url( $first_page_url ) . '">&laquo;</a> ';
 				echo '<a class="prev-page button" href="' . esc_url( $prev_page_url ) . '">&lsaquo;</a> ';
 			} else {
@@ -314,8 +358,24 @@ class Category_Indexer_For_Woo_Admin {
 			echo '</span> ';
 
 			if ( $current_page < $total_pages ) {
-				$next_page_url = wp_nonce_url( add_query_arg( 'paged', $current_page + 1 ), 'category_indexer_pagination' );
-				$last_page_url = wp_nonce_url( add_query_arg( 'paged', $total_pages ), 'category_indexer_pagination' );
+				$next_page_url = add_query_arg(
+					array(
+						'page'  => 'wc-category-indexer',
+						'tab'   => 'categories',
+						'paged' => $current_page + 1,
+					),
+					admin_url( 'admin.php' )
+				);
+				$next_page_url = wp_nonce_url( $next_page_url, 'category_indexer_tab_categories' );
+				$last_page_url = add_query_arg(
+					array(
+						'page'  => 'wc-category-indexer',
+						'tab'   => 'categories',
+						'paged' => $total_pages,
+					),
+					admin_url( 'admin.php' )
+				);
+				$last_page_url = wp_nonce_url( $last_page_url, 'category_indexer_tab_categories' );
 				echo '<a class="next-page button" href="' . esc_url( $next_page_url ) . '">&rsaquo;</a> ';
 				echo '<a class="last-page button" href="' . esc_url( $last_page_url ) . '">&raquo;</a>';
 			} else {
