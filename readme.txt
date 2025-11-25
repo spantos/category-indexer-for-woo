@@ -123,6 +123,9 @@ Yes, the plugin automatically adds canonical URLs to paginated category and shop
 = Can I control link juice distribution to my product pages? =
 Yes, by controlling the follow/nofollow meta robots tag settings on category pages, you can optimize how link juice flows from your categories to your individual product pages, ensuring maximum SEO benefit.
 
+= Is the plugin compatible with block themes? =
+Yes, Category Indexer for WooCommerce is fully compatible with block themes (FSE - Full Site Editing). The plugin works seamlessly with both classic themes and modern block themes.
+
 == Screenshots ==
 1. Admin settings page where you can configure indexing and follow settings for shop and category pages.
 
