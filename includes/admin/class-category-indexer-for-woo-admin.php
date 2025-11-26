@@ -1120,6 +1120,11 @@ class Category_Indexer_For_Woo_Admin {
 			echo '<p><strong>' . esc_html__( 'Category Indexer for WooCommerce', 'category-indexer-for-woocommerce' ) . '</strong></p>';
 			/* translators: 1: old version number, 2: new version number */
 			echo '<p>' . sprintf( esc_html__( 'Plugin has been successfully upgraded from version %1$s to version %2$s.', 'category-indexer-for-woocommerce' ), esc_html( $from_version ), esc_html( $to_version ) ) . '</p>';
+			echo '<p>' . esc_html__( 'After upgrading to the new version, you need to activate settings for categories and subcategories:', 'category-indexer-for-woocommerce' ) . '</p>';
+			echo '<ul style="list-style-type: disc; margin-left: 20px;">';
+			echo '<li>' . esc_html__( 'Activate global settings for all categories and subcategories in the General tab', 'category-indexer-for-woocommerce' ) . '</li>';
+			echo '<li>' . esc_html__( 'OR activate individual settings for each category/subcategory in the Categories tab', 'category-indexer-for-woocommerce' ) . '</li>';
+			echo '</ul>';
 			echo '<p>' . esc_html__( 'Thank you for keeping your plugin up to date!', 'category-indexer-for-woocommerce' ) . '</p>';
 			echo '</div>';
 
