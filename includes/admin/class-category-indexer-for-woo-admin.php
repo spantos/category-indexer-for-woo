@@ -1132,10 +1132,10 @@ class Category_Indexer_For_Woo_Admin {
 			echo '<p><strong>' . esc_html__( 'Category Indexer for WooCommerce has been updated!', 'category-indexer-for-woocommerce' ) . '</strong></p>';
 			echo '<p>' . esc_html__( 'After upgrading to the new version, you need to activate settings for categories and subcategories:', 'category-indexer-for-woocommerce' ) . '</p>';
 			echo '<ul style="list-style: disc; margin-left: 20px;">';
-			/* translators: %s: URL to General tab */
-			echo '<li>' . sprintf( esc_html__( 'Activate global settings for all categories and subcategories in the %s tab', 'category-indexer-for-woocommerce' ), '<a href="' . esc_url( $general_tab_url ) . '"><strong>' . esc_html__( 'General', 'category-indexer-for-woocommerce' ) . '</strong></a>' ) . '</li>';
-			/* translators: %s: URL to Categories tab */
-			echo '<li>' . sprintf( esc_html__( 'OR activate individual settings for each category/subcategory in the %s tab', 'category-indexer-for-woocommerce' ), '<a href="' . esc_url( $categories_tab_url ) . '"><strong>' . esc_html__( 'Categories', 'category-indexer-for-woocommerce' ) . '</strong></a>' ) . '</li>';
+			/* translators: %s: link to General tab */
+			echo '<li>' . sprintf( __( 'Activate global settings for all categories and subcategories in the %s tab', 'category-indexer-for-woocommerce' ), '<a href="' . esc_url( $general_tab_url ) . '"><strong>' . esc_html__( 'General', 'category-indexer-for-woocommerce' ) . '</strong></a>' ) . '</li>';
+			/* translators: %s: link to Categories tab */
+			echo '<li>' . sprintf( __( 'OR activate individual settings for each category/subcategory in the %s tab', 'category-indexer-for-woocommerce' ), '<a href="' . esc_url( $categories_tab_url ) . '"><strong>' . esc_html__( 'Categories', 'category-indexer-for-woocommerce' ) . '</strong></a>' ) . '</li>';
 			echo '</ul>';
 			echo '</div>';
 		}
