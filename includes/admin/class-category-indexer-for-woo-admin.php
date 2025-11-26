@@ -1116,7 +1116,7 @@ class Category_Indexer_For_Woo_Admin {
 			$from_version = $upgrade_notice['from_version'];
 			$to_version   = $upgrade_notice['to_version'];
 
-			echo '<div class="notice notice-info is-dismissible" id="category-indexer-upgrade-notice" data-notice-id="category_indexer_upgrade_notice">';
+			echo '<div class="notice notice-warning is-dismissible" id="category-indexer-upgrade-notice" data-notice-id="category_indexer_upgrade_notice">';
 			echo '<p><strong>' . esc_html__( 'Category Indexer for WooCommerce', 'category-indexer-for-woocommerce' ) . '</strong></p>';
 			/* translators: 1: old version number, 2: new version number */
 			echo '<p>' . sprintf( esc_html__( 'Plugin has been successfully upgraded from version %1$s to version %2$s.', 'category-indexer-for-woocommerce' ), esc_html( $from_version ), esc_html( $to_version ) ) . '</p>';
@@ -1125,6 +1125,9 @@ class Category_Indexer_For_Woo_Admin {
 			echo '<li>' . esc_html__( 'Activate global settings for all categories and subcategories in the General tab', 'category-indexer-for-woocommerce' ) . '</li>';
 			echo '<li>' . esc_html__( 'OR activate individual settings for each category/subcategory in the Categories tab', 'category-indexer-for-woocommerce' ) . '</li>';
 			echo '</ul>';
+			echo '<p>';
+			echo '<a href="' . esc_url( admin_url( 'admin.php?page=wc-category-indexer' ) ) . '" class="button button-primary">' . esc_html__( 'Go to Settings', 'category-indexer-for-woocommerce' ) . '</a>';
+			echo '</p>';
 			echo '<p>' . esc_html__( 'Thank you for keeping your plugin up to date!', 'category-indexer-for-woocommerce' ) . '</p>';
 			echo '</div>';
 
