@@ -121,7 +121,7 @@ Yes, Category Indexer for WooCommerce is fully translation ready, allowing you t
 Yes, the plugin automatically adds canonical URLs to paginated category and shop pages, pointing back to the first page as the canonical version. This is crucial for proper SEO and preventing duplicate content.
 
 = Can I control link juice distribution to my product pages? =
-Yes, by controlling the follow/nofollow meta robots tag settings on category pages, you can optimize how link juice flows from your categories to your individual product pages, ensuring maximum SEO benefit.
+Yes, by controlling the index/noindex, follow/nofollow meta robots tag settings on category pages, you can optimize how link juice flows from your categories to your individual product pages, ensuring maximum SEO benefit.
 
 = Is the plugin compatible with block themes? =
 Yes, Category Indexer for WooCommerce is fully compatible with block themes (FSE - Full Site Editing). The plugin works seamlessly with both classic themes and modern block themes.
@@ -131,8 +131,22 @@ Yes, Category Indexer for WooCommerce is fully compatible with block themes (FSE
 
 == Changelog ==
 
+= 2.0.0 =
+* Complete redesign and refactoring of the PHP code
+* Added category caching
+* Added option to Remove /page/1/ from pagination links and URLs
+* Added support for Block Themes (FSE Themes)
+* Added meta robots tag setting for Site Search
+* Added default meta robots tag values ​​for categories and subcategories
+* Added default canonical tag values ​​for category and subcategories pagination
+
 = 1.0.1 =
 * Fixed plugin uninstallation.
+
+== Upgrade Notice ==
+
+= 2.0.0 =
+In version 2.0.0, global meta robots tag and canonical settings were added for categories and subcategories. After upgrading to the new version, you need to make settings in the General tab or in the Categories tab to make settings for each category/subcategory separately.
 
 
 
