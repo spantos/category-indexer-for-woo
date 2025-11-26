@@ -146,7 +146,10 @@ Yes, Category Indexer for WooCommerce is fully compatible with block themes (FSE
 == Upgrade Notice ==
 
 = 2.0.0 =
-In version 2.0.0, global meta robots tag and canonical settings were added for categories and subcategories. After upgrading to the new version, you need to make settings in the General tab or in the Categories tab to make settings for each category/subcategory separately.
+**IMPORTANT:** After upgrading to version 2.0.0, you MUST configure your settings. Go to Category Indexer → General tab to activate global settings for all categories and subcategories, OR go to Category Indexer → Categories tab to activate individual settings for each category/subcategory. Your previous settings will need to be reconfigured.
+
+= 1.0.1 =
+Minor bug fix for plugin uninstallation.
 
 
 
