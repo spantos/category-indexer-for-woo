@@ -171,6 +171,36 @@ document.addEventListener('DOMContentLoaded', function() {
          });
       });
    }
+
+   // Handle upgrade notice dismissal
+   const upgradeNotice = document.querySelector('.category-indexer-upgrade-notice');
+   if (upgradeNotice) {
+      const dismissButton = upgradeNotice.querySelector('.notice-dismiss');
+      if (dismissButton) {
+         dismissButton.addEventListener('click', function(e) {
+            // Make AJAX request to dismiss the notice
+            const formData = new FormData();
+            formData.append('action', 'dismiss_upgrade_notice');
+            formData.append('nonce', categoryIndexerAjax.nonce);
+
+            fetch(categoryIndexerAjax.ajax_url, {
+               method: 'POST',
+               body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+               if (data.success) {
+                  console.log('Upgrade notice dismissed successfully');
+               } else {
+                  console.error('Failed to dismiss upgrade notice:', data.data.message);
+               }
+            })
+            .catch(error => {
+               console.error('Error dismissing upgrade notice:', error);
+            });
+         });
+      }
+   }
 });
 
 function toggle(radioButton) {
