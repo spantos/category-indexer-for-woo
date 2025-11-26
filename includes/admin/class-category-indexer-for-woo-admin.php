@@ -54,22 +54,23 @@ class Category_Indexer_For_Woo_Admin {
 	 * Checks if the plugin has been upgraded and sets a flag for showing upgrade notice.
 	 *
 	 * This function compares the current plugin version with the stored version in the database.
-	 * If the current version is greater than the stored version, it sets a transient to trigger
-	 * the display of an upgrade notice to the administrator.
+	 * If upgrading from version 1.0.1, it sets a transient to trigger the display of an upgrade notice.
 	 */
 	public function check_plugin_version() {
-		$stored_version  = get_option( 'category_indexer_version', '0.0.0' );
+		$stored_version  = get_option( 'category_indexer_version', '' );
 		$current_version = CATEGORY_INDEXER_VERSION;
 
-		// Check if current version is greater than stored version
-		if ( version_compare( $current_version, $stored_version, '>' ) ) {
+		// Only show upgrade notice when upgrading from version 1.0.1
+		if ( $stored_version === '1.0.1' && version_compare( $current_version, $stored_version, '>' ) ) {
 			// Set transient to show upgrade notice (expires in 30 days)
 			set_transient( 'category_indexer_show_upgrade_notice', array(
 				'from_version' => $stored_version,
 				'to_version'   => $current_version,
 			), 30 * DAY_IN_SECONDS );
+		}
 
-			// Update stored version
+		// Update stored version if it's different from current
+		if ( $stored_version !== $current_version ) {
 			update_option( 'category_indexer_version', $current_version );
 		}
 	}
@@ -480,6 +481,10 @@ class Category_Indexer_For_Woo_Admin {
 			);
 		}
 		if ( version_compare( phpversion(), '7.0', '>=' ) ){
+			// Initialize plugin version option for new installations
+			if ( ! get_option( 'category_indexer_version' ) ) {
+				update_option( 'category_indexer_version', CATEGORY_INDEXER_VERSION );
+			}
 			return true;
 		}  else {
 			deactivate_plugins( CATEGORY_INDEXER_PLUGIN_FILE );
