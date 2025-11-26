@@ -48,6 +48,10 @@ class Category_Indexer_For_Woo_Admin {
 		add_action( 'wp_ajax_clear_category_cache', array( $this, 'ajax_clear_category_cache' ) );
 		add_action( 'wp_ajax_update_categories_per_page', array( $this, 'ajax_update_categories_per_page' ) );
 		add_action( 'wp_ajax_dismiss_upgrade_notice', array( $this, 'ajax_dismiss_upgrade_notice' ) );
+
+		// Add upgrade notice in plugin row (before upgrade)
+		$plugin_file = CATEGORY_INDEXER_PLUGIN_FILE;
+		add_action( "in_plugin_update_message-category-indexer-for-woo/{$plugin_file}", array( $this, 'show_upgrade_notification_message' ), 10, 2 );
 	}
 
 	/**
@@ -1308,5 +1312,38 @@ class Category_Indexer_For_Woo_Admin {
 				'message' => __( 'Upgrade notice dismissed.', 'category-indexer-for-woocommerce' ),
 			)
 		);
+	}
+
+	/**
+	 * Shows upgrade notification message in plugin update row (before upgrade).
+	 *
+	 * This function is called by WordPress when displaying plugin update information.
+	 * It shows important upgrade instructions to users before they update the plugin.
+	 *
+	 * @param array  $plugin_data An array of plugin metadata.
+	 * @param object $response    An object of metadata about the available plugin update.
+	 */
+	public function show_upgrade_notification_message( $plugin_data, $response ) {
+		// Only show if there's a new version available
+		if ( empty( $response->new_version ) ) {
+			return;
+		}
+
+		$current_version = CATEGORY_INDEXER_VERSION;
+		$new_version     = $response->new_version;
+
+		// Only show for actual upgrades (not downgrades)
+		if ( version_compare( $current_version, $new_version, '>=' ) ) {
+			return;
+		}
+
+		echo '<div class="notice inline notice-warning notice-alt" style="margin: 10px 0; padding: 10px 12px;">';
+		echo '<p style="margin: 0 0 8px 0;"><strong style="color: #d63638;">' . esc_html__( '⚠️ Important: Configuration Required After Update', 'category-indexer-for-woocommerce' ) . '</strong></p>';
+		echo '<p style="margin: 0 0 5px 0;">' . esc_html__( 'After upgrading to the new version, you must activate settings:', 'category-indexer-for-woocommerce' ) . '</p>';
+		echo '<ul style="margin: 5px 0 5px 20px; list-style: disc;">';
+		echo '<li>' . esc_html__( 'Go to Category Indexer → General tab to activate global settings for all categories and subcategories', 'category-indexer-for-woocommerce' ) . '</li>';
+		echo '<li>' . esc_html__( 'OR go to Category Indexer → Categories tab to activate individual settings for each category/subcategory', 'category-indexer-for-woocommerce' ) . '</li>';
+		echo '</ul>';
+		echo '</div>';
 	}
 }
