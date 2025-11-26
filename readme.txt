@@ -132,11 +132,13 @@ Yes, Category Indexer for WooCommerce is fully compatible with block themes (FSE
 == Changelog ==
 
 = 2.0.0 =
-* Major update with new features and improvements
-* Added global category and subcategory SEO defaults
-* Enhanced admin interface with tabbed navigation
-* Improved performance with category caching
-* Added category-specific settings override capability
+* Complete redesign and refactoring of the PHP code
+* Added category caching
+* Added option to Remove /page/1/ from pagination links and URLs
+* Added support for Block Themes (FSE Themes)
+* Added meta robots tag setting for Site Search
+* Added default meta robots tag values ​​for categories and subcategories
+* Added default canonical tag values ​​for category and subcategories pagination
 
 = 1.0.1 =
 * Fixed plugin uninstallation.
