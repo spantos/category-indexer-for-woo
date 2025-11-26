@@ -37,6 +37,9 @@ class Category_Indexer_For_Woo_Admin {
 			Category_Indexer_Cache::init();
 		}
 
+		// Check for plugin version upgrade
+		$this->check_plugin_version();
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
@@ -44,6 +47,31 @@ class Category_Indexer_For_Woo_Admin {
 		add_action( 'wp_ajax_reset_category_settings', array( $this, 'ajax_reset_category_settings' ) );
 		add_action( 'wp_ajax_clear_category_cache', array( $this, 'ajax_clear_category_cache' ) );
 		add_action( 'wp_ajax_update_categories_per_page', array( $this, 'ajax_update_categories_per_page' ) );
+		add_action( 'wp_ajax_dismiss_upgrade_notice', array( $this, 'ajax_dismiss_upgrade_notice' ) );
+	}
+
+	/**
+	 * Checks if the plugin has been upgraded and sets a flag for showing upgrade notice.
+	 *
+	 * This function compares the current plugin version with the stored version in the database.
+	 * If the current version is greater than the stored version, it sets a transient to trigger
+	 * the display of an upgrade notice to the administrator.
+	 */
+	public function check_plugin_version() {
+		$stored_version  = get_option( 'category_indexer_version', '0.0.0' );
+		$current_version = CATEGORY_INDEXER_VERSION;
+
+		// Check if current version is greater than stored version
+		if ( version_compare( $current_version, $stored_version, '>' ) ) {
+			// Set transient to show upgrade notice (expires in 30 days)
+			set_transient( 'category_indexer_show_upgrade_notice', array(
+				'from_version' => $stored_version,
+				'to_version'   => $current_version,
+			), 30 * DAY_IN_SECONDS );
+
+			// Update stored version
+			update_option( 'category_indexer_version', $current_version );
+		}
 	}
 
 	/**
@@ -1071,13 +1099,45 @@ class Category_Indexer_For_Woo_Admin {
 	}
 
 	/**
-	 * Shows admin notices for cache operations.
+	 * Shows admin notices for cache operations and plugin upgrades.
 	 *
 	 * This function displays success or error notices after cache operations
-	 * like clearing the cache or resetting settings.
+	 * like clearing the cache or resetting settings, and also shows upgrade notices.
 	 */
 	public function show_admin_notices() {
-		// Only show on our plugin's admin page
+		// Show upgrade notice if plugin was upgraded
+		$upgrade_notice = get_transient( 'category_indexer_show_upgrade_notice' );
+		if ( $upgrade_notice && current_user_can( 'manage_options' ) ) {
+			$from_version = $upgrade_notice['from_version'];
+			$to_version   = $upgrade_notice['to_version'];
+
+			echo '<div class="notice notice-info is-dismissible" id="category-indexer-upgrade-notice" data-notice-id="category_indexer_upgrade_notice">';
+			echo '<p><strong>' . esc_html__( 'Category Indexer for WooCommerce', 'category-indexer-for-woocommerce' ) . '</strong></p>';
+			/* translators: 1: old version number, 2: new version number */
+			echo '<p>' . sprintf( esc_html__( 'Plugin has been successfully upgraded from version %1$s to version %2$s.', 'category-indexer-for-woocommerce' ), esc_html( $from_version ), esc_html( $to_version ) ) . '</p>';
+			echo '<p>' . esc_html__( 'Thank you for keeping your plugin up to date!', 'category-indexer-for-woocommerce' ) . '</p>';
+			echo '</div>';
+
+			// Add inline script to handle dismiss
+			?>
+			<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$('#category-indexer-upgrade-notice').on('click', '.notice-dismiss', function() {
+					$.ajax({
+						url: ajaxurl,
+						type: 'POST',
+						data: {
+							action: 'dismiss_upgrade_notice',
+							nonce: '<?php echo esc_js( wp_create_nonce( 'dismiss_upgrade_notice_nonce' ) ); ?>'
+						}
+					});
+				});
+			});
+			</script>
+			<?php
+		}
+
+		// Only show cache/settings notices on our plugin's admin page
 		if ( ! isset( $_GET['page'] ) || sanitize_text_field( wp_unslash( $_GET['page'] ) ) !== 'wc-category-indexer' ) {
 			return;
 		}
@@ -1218,6 +1278,35 @@ class Category_Indexer_For_Woo_Admin {
 		wp_send_json_success(
 			array(
 				'message' => __( 'Categories per page setting updated successfully.', 'category-indexer-for-woocommerce' ),
+			)
+		);
+	}
+
+	/**
+	 * AJAX handler for dismissing the upgrade notice.
+	 *
+	 * This function handles the AJAX request to dismiss the upgrade notice
+	 * by deleting the transient that triggers its display.
+	 */
+	public function ajax_dismiss_upgrade_notice() {
+		// Check nonce for security
+		check_ajax_referer( 'dismiss_upgrade_notice_nonce', 'nonce' );
+
+		// Check user capabilities
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You do not have permission to perform this action.', 'category-indexer-for-woocommerce' ),
+				)
+			);
+		}
+
+		// Delete the transient to dismiss the notice
+		delete_transient( 'category_indexer_show_upgrade_notice' );
+
+		wp_send_json_success(
+			array(
+				'message' => __( 'Upgrade notice dismissed.', 'category-indexer-for-woocommerce' ),
 			)
 		);
 	}
