@@ -54,17 +54,18 @@ class Category_Indexer_For_Woo_Admin {
 	 * Checks if the plugin has been upgraded and sets a flag for showing upgrade notice.
 	 *
 	 * This function compares the current plugin version with the stored version in the database.
-	 * If upgrading from version 1.0.1, it sets a transient to trigger the display of an upgrade notice.
+	 * If upgrading from version 1.0.1 (which didn't have version tracking), it sets a transient
+	 * to trigger the display of an upgrade notice.
 	 */
 	public function check_plugin_version() {
 		$stored_version  = get_option( 'category_indexer_version', '' );
 		$current_version = CATEGORY_INDEXER_VERSION;
 
-		// Only show upgrade notice when upgrading from version 1.0.1
-		if ( $stored_version === '1.0.1' && version_compare( $current_version, $stored_version, '>' ) ) {
+		// If option doesn't exist (empty), user is upgrading from version 1.0.1 which didn't have version tracking
+		if ( empty( $stored_version ) && $current_version === '2.0.0' ) {
 			// Set transient to show upgrade notice (expires in 30 days)
 			set_transient( 'category_indexer_show_upgrade_notice', array(
-				'from_version' => $stored_version,
+				'from_version' => '1.0.1',
 				'to_version'   => $current_version,
 			), 30 * DAY_IN_SECONDS );
 		}
