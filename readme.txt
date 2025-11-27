@@ -146,7 +146,7 @@ Yes, Category Indexer for WooCommerce is fully compatible with block themes (FSE
 == Upgrade Notice ==
 
 = 2.0.0 =
-**IMPORTANT:** After upgrading to version 2.0.0, you MUST configure the plugin settings. Go to Category Indexer → General tab to activate global settings for categories, OR go to Category Indexer → Categories tab to activate individual settings for each category. Your previous settings will need to be reconfigured.
+**IMPORTANT:** After upgrading to 2.0.0 you MUST configure plugin settings. Open Category Indexer → General tab for global category settings, OR Category Indexer → Categories tab for individual category setup. Previous settings must be reconfigured.
 
 = 1.0.1 =
 Minor bug fix for plugin uninstallation.
