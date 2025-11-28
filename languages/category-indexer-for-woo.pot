@@ -1,0 +1,382 @@
+# Copyright (C) 2025 Slobodan Pantovic
+# This file is distributed under the GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Category Indexer for WooCommerce 2.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/category-indexer-for-woocommerce\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-11-28T12:58:37+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: category-indexer-for-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: includes/admin/class-category-indexer-for-woo-admin.php:181
+#: includes/admin/class-category-indexer-for-woo-admin.php:1121
+msgid "Category Indexer for WooCommerce"
+msgstr ""
+
+#. Description of the plugin
+msgid "Display and manage meta robots index and canonical options for WooCommerce categories and subcategories."
+msgstr ""
+
+#. Author of the plugin
+msgid "Slobodan Pantovic"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:94
+#: includes/admin/class-category-indexer-for-woo-admin.php:95
+msgid "Category Indexer"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:175
+msgid "Security verification failed. Please try again."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:201
+msgid "General"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:202
+msgid "Categories"
+msgstr ""
+
+#. translators: %s: number of categories
+#: includes/admin/class-category-indexer-for-woo-admin.php:277
+#: includes/admin/class-category-indexer-for-woo-admin.php:356
+msgid "%s categories"
+msgstr ""
+
+#. translators: 1: current page number, 2: total number of pages
+#: includes/admin/class-category-indexer-for-woo-admin.php:311
+#: includes/admin/class-category-indexer-for-woo-admin.php:387
+msgid "%1$s of %2$s"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:441
+msgid "Are you sure you want to reset all category settings to default? This action cannot be undone."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:442
+msgid "Are you sure you want to clear the category cache? The cache will be rebuilt automatically on the next page load."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:443
+msgid "Resetting..."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:444
+msgid "Clearing..."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:445
+#: includes/admin/class-category-indexer-for-woo-admin.php:989
+msgid "Reset All Categories to Default"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:446
+#: includes/admin/class-category-indexer-for-woo-admin.php:990
+msgid "Clear Cache"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:447
+msgid "An error occurred."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:448
+msgid "An error occurred while resetting settings."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:449
+msgid "An error occurred while clearing cache."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:450
+msgid "An error occurred while updating settings."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:479
+msgid "This plugin requires Rank Math SEO or Yoast SEO to be installed and activated. Please install and activate one of these plugins before activating Category Indexer for WooCommerce."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:493
+msgid "This plugin requires PHP version 7.0 or higher. Please update your PHP version before activating Category Indexer for WooCommerce."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:513
+msgid "Shop Pages Settings"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:518
+#: includes/admin/class-category-indexer-for-woo-admin.php:617
+#: includes/admin/class-category-indexer-for-woo-admin.php:697
+#: includes/admin/class-category-indexer-for-woo-admin.php:1033
+msgid "First Page"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:523
+#: includes/admin/class-category-indexer-for-woo-admin.php:552
+#: includes/admin/class-category-indexer-for-woo-admin.php:622
+#: includes/admin/class-category-indexer-for-woo-admin.php:651
+#: includes/admin/class-category-indexer-for-woo-admin.php:702
+#: includes/admin/class-category-indexer-for-woo-admin.php:731
+#: includes/admin/class-category-indexer-for-woo-admin.php:826
+#: includes/admin/class-category-indexer-for-woo-admin.php:871
+#: includes/admin/class-category-indexer-for-woo-admin.php:1038
+#: includes/admin/class-category-indexer-for-woo-admin.php:1067
+msgid "Index"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:527
+#: includes/admin/class-category-indexer-for-woo-admin.php:556
+#: includes/admin/class-category-indexer-for-woo-admin.php:626
+#: includes/admin/class-category-indexer-for-woo-admin.php:655
+#: includes/admin/class-category-indexer-for-woo-admin.php:706
+#: includes/admin/class-category-indexer-for-woo-admin.php:735
+#: includes/admin/class-category-indexer-for-woo-admin.php:830
+#: includes/admin/class-category-indexer-for-woo-admin.php:875
+#: includes/admin/class-category-indexer-for-woo-admin.php:1042
+#: includes/admin/class-category-indexer-for-woo-admin.php:1071
+msgid "No index"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:533
+#: includes/admin/class-category-indexer-for-woo-admin.php:562
+#: includes/admin/class-category-indexer-for-woo-admin.php:632
+#: includes/admin/class-category-indexer-for-woo-admin.php:661
+#: includes/admin/class-category-indexer-for-woo-admin.php:712
+#: includes/admin/class-category-indexer-for-woo-admin.php:741
+#: includes/admin/class-category-indexer-for-woo-admin.php:836
+#: includes/admin/class-category-indexer-for-woo-admin.php:881
+#: includes/admin/class-category-indexer-for-woo-admin.php:1048
+#: includes/admin/class-category-indexer-for-woo-admin.php:1077
+msgid "Follow"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:537
+#: includes/admin/class-category-indexer-for-woo-admin.php:566
+#: includes/admin/class-category-indexer-for-woo-admin.php:636
+#: includes/admin/class-category-indexer-for-woo-admin.php:665
+#: includes/admin/class-category-indexer-for-woo-admin.php:716
+#: includes/admin/class-category-indexer-for-woo-admin.php:745
+#: includes/admin/class-category-indexer-for-woo-admin.php:840
+#: includes/admin/class-category-indexer-for-woo-admin.php:885
+#: includes/admin/class-category-indexer-for-woo-admin.php:1052
+#: includes/admin/class-category-indexer-for-woo-admin.php:1081
+msgid "No follow"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:547
+#: includes/admin/class-category-indexer-for-woo-admin.php:1062
+msgid "All Other Pages"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:576
+msgid "Canonical tag for pages after the first page"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:580
+#: includes/admin/class-category-indexer-for-woo-admin.php:1095
+msgid "Default (No Change)"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:584
+#: includes/admin/class-category-indexer-for-woo-admin.php:1099
+msgid "First page as a canonical link"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:604
+msgid "Category & Subcategory SEO Defaults"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:606
+msgid "These settings apply to all categories and subcategories unless overridden by specific category settings in the Categories tab."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:612
+msgid "Product Categories"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:646
+#: includes/admin/class-category-indexer-for-woo-admin.php:726
+msgid "Other Pages in Pagination"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:675
+#: includes/admin/class-category-indexer-for-woo-admin.php:755
+msgid "Canonical Tag for Other Pages"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:679
+#: includes/admin/class-category-indexer-for-woo-admin.php:759
+msgid "Points to itself (each page has its own canonical)"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:683
+msgid "Points to first page (all pages use category base URL)"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:692
+msgid "Product Subcategories"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:763
+msgid "Points to first page (all pages use subcategory base URL)"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:786
+msgid "WooCommerce Order By Filter Settings"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:790
+msgid "Filter \"Order By\" Settings"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:794
+msgid "Noindex"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:798
+msgid "Nofollow"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:817
+#: includes/admin/class-category-indexer-for-woo-admin.php:821
+msgid "URL with Parameters"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:861
+msgid "Site Search Settings"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:866
+msgid "Meta Robots Tag"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:895
+msgid "Canonical Tag"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:899
+msgid "Set canonical tag to homepage"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:903
+msgid "When enabled, all search result pages will have a canonical tag pointing to the site homepage."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:922
+msgid "Pagination SEO Settings"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:926
+msgid "Remove /page/1/ from URLs"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:930
+msgid "Remove /page/1/ from pagination links and URLs"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:934
+msgid "When enabled, the first page of categories and shop will use clean URLs without /page/1/ suffix. This prevents duplicate content issues and is better for SEO. The URL will be changed in the browser without a 301 redirect."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:975
+msgid "Category Archive Settings"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:980
+msgid "Categories per page:"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1000
+msgid " Pages"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1005
+msgid " - Subcategory of "
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1010
+msgid " - Category"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1025
+msgid "Override Global Settings (use custom settings for this category)"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1091
+msgid "Canonical Tag for Pages After First"
+msgstr ""
+
+#. translators: 1: old version number, 2: new version number
+#: includes/admin/class-category-indexer-for-woo-admin.php:1123
+msgid "Plugin has been successfully upgraded from version %1$s to version %2$s."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1124
+msgid "After upgrading to the new version, you need to activate settings for categories and subcategories:"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1126
+msgid "Activate global settings for all categories and subcategories in the General tab"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1127
+msgid "OR activate individual settings for each category/subcategory in the Categories tab"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1130
+msgid "Go to Settings"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1132
+msgid "Thank you for keeping your plugin up to date!"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1167
+msgid "Success!"
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1168
+msgid "Category cache has been cleared and rebuilt with fresh data."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1188
+#: includes/admin/class-category-indexer-for-woo-admin.php:1230
+#: includes/admin/class-category-indexer-for-woo-admin.php:1275
+#: includes/admin/class-category-indexer-for-woo-admin.php:1313
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1204
+msgid "All category settings have been reset to default."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1210
+msgid "Failed to reset category settings. They may already be at default values."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1242
+msgid "Category cache has been cleared successfully."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1248
+msgid "Failed to clear cache. It may already be empty."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1255
+msgid "Cache class not found."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1294
+msgid "Categories per page setting updated successfully."
+msgstr ""
+
+#: includes/admin/class-category-indexer-for-woo-admin.php:1323
+msgid "Upgrade notice dismissed."
+msgstr ""
