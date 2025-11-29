@@ -20,6 +20,7 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 		private $yoast_activated     = false;
 		private $request_url         = null;
 		private $robots_noindex      = null;
+		private $options_cache = array();
 
 
 		/**
@@ -56,7 +57,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			}
 
 			// Remove /page/1/ from pagination links and URLs for SEO (if enabled in settings)
-			$pagination_options = get_option( 'category_indexer_option_pagination' );
+			//$pagination_options = get_option( 'category_indexer_option_pagination' );
+			$pagination_options = $this->get_option_cached( 'category_indexer_option_pagination' );
 			if ( isset( $pagination_options['remove_page_one'] ) && $pagination_options['remove_page_one'] === 'yes' ) {
 				add_filter( 'paginate_links', array( $this, 'remove_page_one_from_links' ) );
 				add_filter( 'get_previous_posts_page_link', array( $this, 'remove_page_one_from_links' ) );
@@ -64,6 +66,24 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 				add_filter( 'render_block', array( $this, 'clean_block_pagination_links' ), 10, 2 );
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_pagination_fix_script' ) );
 			}
+		}
+
+		/**
+		 * Gets a WordPress option with internal caching to reduce database queries.
+		 *
+		 * This method caches option values in the instance to avoid multiple
+		 * database calls for the same option during a single request.
+		 *
+		 * @param string $option_name The name of the option to retrieve.
+		 * @param mixed  $default     Optional. Default value to return if option doesn't exist. Default false.
+		 * @return mixed The option value from cache or database.
+		 */
+		
+		private function get_option_cached( $option_name, $default = false ) {
+			if ( ! array_key_exists( $option_name, $this->options_cache ) ) {
+				$this->options_cache[ $option_name ] = get_option( $option_name, $default );
+			}
+			return $this->options_cache[ $option_name ];
 		}
 
 		/**
@@ -133,8 +153,9 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 		 * @return string The default setting value.
 		 */
 		private function get_global_category_default( $term, $setting_type ) {
-			$global_defaults = get_option( 'category_indexer_global_category_defaults' );
-
+			//$global_defaults = get_option( 'category_indexer_global_category_defaults' );
+			$global_defaults = $this->get_option_cached( 'category_indexer_global_category_defaults' );
+			
 			// Determine if this is a subcategory (has parent) or a category (no parent)
 			$is_subcategory = ( $term->parent !== 0 );
 			$prefix         = $is_subcategory ? 'subcategory_' : 'category_';
@@ -188,7 +209,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 
 			// Handle search pages
 			if ( is_search() ) {
-				$search_options = get_option( 'category_indexer_option_search' );
+				//$search_options = get_option( 'category_indexer_option_search' );
+				$search_options = $this->get_option_cached( 'category_indexer_option_search' );
 				if ( $search_options !== false ) {
 					$meta_robots_index  = $search_options['index'] ?? 'index';
 					$meta_robots_follow = $search_options['follow'] ?? 'follow';
@@ -207,7 +229,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			if ( is_shop() || is_product_category() ) {
 				$current_page = get_query_var( 'paged' ) ?? 1;
 				if ( is_shop() ) {
-					$shop_page_index_option = get_option( 'category_indexer_option_shop' );
+					//$shop_page_index_option = get_option( 'category_indexer_option_shop' );
+					$shop_page_index_option = $this->get_option_cached( 'category_indexer_option_shop' );
 					if ( $shop_page_index_option === false ) {
 						return $robots;
 					}
@@ -218,7 +241,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 				}
 				if ( is_product_category() ) {
 					$term                       = get_queried_object();
-					$category_page_index_option = ( get_option( 'category_indexer_category_options' ) );
+					//$category_page_index_option = ( get_option( 'category_indexer_category_options' ) );
+					$category_page_index_option = $this->get_option_cached( 'category_indexer_category_options' );
 
 					// Check if custom settings are enabled for this category
 					$use_custom_settings = false;
@@ -257,7 +281,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 					$robots = $meta_robots_index . ',' . $meta_robots_follow;
 				}
 
-				$url_parameters_options = get_option( 'category_indexer_option_url_parameters' );
+				//$url_parameters_options = get_option( 'category_indexer_option_url_parameters' );
+				$url_parameters_options = $this->get_option_cached( 'category_indexer_option_url_parameters' );
 				if ( isset( $url_parameters_options ) ) {
 					if ( $this->has_url_parameters( $this->request_url ) ) {
 						$url_parameters_index  = $url_parameters_options['index'] ?? false;
@@ -273,7 +298,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 				}
 
 				// Override with WooCommerce order by filter settings if they are set
-				$orderby_filter_options = get_option( 'category_indexer_option_orderby' );
+				//$orderby_filter_options = get_option( 'category_indexer_option_orderby' );
+				$orderby_filter_options = $this->get_option_cached( 'category_indexer_option_orderby' );
 				if ( isset( $_GET['orderby'] ) && ! empty( sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) ) ) {
 					if ( isset( $orderby_filter_options['noindex'] ) ) {
 						$meta_robots_index = 'noindex';
@@ -313,7 +339,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 
 			// Handle search pages
 			if ( is_search() ) {
-				$search_options = get_option( 'category_indexer_option_search' );
+				//$search_options = get_option( 'category_indexer_option_search' );
+				$search_options = $this->get_option_cached( 'category_indexer_option_search' );
 				if ( $search_options !== false && isset( $search_options['canonical_to_homepage'] ) && $search_options['canonical_to_homepage'] === 'yes' ) {
 					$canonical_url = home_url( '/' );
 				}
@@ -334,7 +361,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 
 			$current_page = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 			if ( is_shop() ) {
-				$canonical_option = get_option( 'category_indexer_option_shop_canonical' );
+				//$canonical_option = get_option( 'category_indexer_option_shop_canonical' );
+				$canonical_option = $this->get_option_cached( 'category_indexer_option_shop_canonical' );
 				if ( $canonical_option === false ) {
 					return esc_url( $canonical_url );
 				}
@@ -348,7 +376,8 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			}
 			if ( is_product_category() ) {
 				$current_category           = get_queried_object();
-				$category_canonical_options = get_option( 'category_indexer_category_options' );
+				//$category_canonical_options = get_option( 'category_indexer_category_options' );
+				$category_canonical_options = $this->get_option_cached( 'category_indexer_category_options' );
 
 				if ( $current_page === 1 ) {
 					// For first page, always use default canonical (current URL)
