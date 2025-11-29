@@ -210,18 +210,17 @@ if ( ! class_exists( 'Category_Indexer_For_Woo_Frontend' ) ) {
 			// Handle search pages
 			if ( is_search() ) {
 				$search_options = $this->get_option_cached( 'category_indexer_option_search' );
-				if ( $search_options !== false ) {
-					$meta_robots_index  = $search_options['index'] ?? 'index';
-					$meta_robots_follow = $search_options['follow'] ?? 'follow';
-
+				if ( $search_options !== false && isset( $search_options['noindex_nofollow'] ) && $search_options['noindex_nofollow'] === 'yes' ) {
+					// Checkbox is enabled - set noindex, nofollow
 					if ( $this->rank_math_activated ) {
-						$robots['index']  = $meta_robots_index;
-						$robots['follow'] = $meta_robots_follow;
+						$robots['index']  = 'noindex';
+						$robots['follow'] = 'nofollow';
 					}
-					if ( $this->yoast_activated ) {					
-						$robots = $meta_robots_index . ', ' . $meta_robots_follow ;
+					if ( $this->yoast_activated ) {
+						$robots = 'noindex, nofollow';
 					}
-				}				
+				}
+				// If checkbox is not enabled, don't modify robots tag (return default)
 				return $robots;
 			}
 

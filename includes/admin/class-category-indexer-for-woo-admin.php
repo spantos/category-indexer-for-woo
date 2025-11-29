@@ -864,28 +864,15 @@ class Category_Indexer_For_Woo_Admin {
 				<!-- Meta Robots Tag -->
 				<div class="ci-setting-row">
 					<label class="ci-setting-label"><?php esc_html_e( 'Meta Robots Tag', 'category-indexer-for-woocommerce' ); ?></label>
-					<div class="ci-two-column-radios">
-						<div class="ci-radio-column">
-							<label>
-								<input type="radio" name="category_indexer_option_search[index]" value="index" <?php checked( 'index', $options['index'] ?? '' ); ?>>
-								<?php esc_html_e( 'Index', 'category-indexer-for-woocommerce' ); ?>
-							</label>
-							<label>
-								<input type="radio" name="category_indexer_option_search[index]" value="noindex" <?php checked( 'noindex', $options['index'] ?? '' ); ?>>
-								<?php esc_html_e( 'No index', 'category-indexer-for-woocommerce' ); ?>
-							</label>
-						</div>
-						<div class="ci-radio-column">
-							<label>
-								<input type="radio" name="category_indexer_option_search[follow]" value="follow" <?php checked( 'follow', $options['follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'Follow', 'category-indexer-for-woocommerce' ); ?>
-							</label>
-							<label>
-								<input type="radio" name="category_indexer_option_search[follow]" value="nofollow" <?php checked( 'nofollow', $options['follow'] ?? '' ); ?>>
-								<?php esc_html_e( 'No follow', 'category-indexer-for-woocommerce' ); ?>
-							</label>
-						</div>
+					<div class="ci-checkbox-group">
+						<label>
+							<input type="checkbox" name="category_indexer_option_search[noindex_nofollow]" value="yes" <?php checked( 'yes', $options['noindex_nofollow'] ?? '' ); ?>>
+							<?php esc_html_e( 'Set meta robots to noindex, nofollow', 'category-indexer-for-woocommerce' ); ?>
+						</label>
 					</div>
+					<p class="description">
+						<?php esc_html_e( 'When enabled, search result pages will have meta robots tag set to "noindex, nofollow". When disabled, the plugin will not set a meta robots tag for search pages.', 'category-indexer-for-woocommerce' ); ?>
+					</p>
 				</div>
 
 				<div class="ci-divider"></div>
